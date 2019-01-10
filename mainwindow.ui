@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
-    <height>127</height>
+    <width>480</width>
+    <height>129</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,6 +25,12 @@
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>480</width>
+     <height>0</height>
+    </size>
    </property>
    <property name="maximumSize">
     <size>
@@ -45,6 +51,18 @@
     </item>
     <item row="0" column="1">
      <widget class="QLineEdit" name="lpnLineEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>115</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
       </property>
@@ -65,6 +83,12 @@
     </item>
     <item row="0" column="3">
      <widget class="QPushButton" name="printLPNButton">
+      <property name="maximumSize">
+       <size>
+        <width>60</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="text">
        <string>Print</string>
       </property>
@@ -114,6 +138,18 @@
     </item>
     <item row="1" column="1">
      <widget class="QLineEdit" name="skuLineEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>115</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="placeholderText">
        <string>Fetch to populate</string>
       </property>
@@ -131,6 +167,12 @@
     </item>
     <item row="1" column="3">
      <widget class="QPushButton" name="printSKUButton">
+      <property name="maximumSize">
+       <size>
+        <width>60</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="text">
        <string>Print</string>
       </property>
@@ -177,6 +219,12 @@
     </item>
     <item row="2" column="1">
      <widget class="QLineEdit" name="textLineEdit">
+      <property name="minimumSize">
+       <size>
+        <width>125</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="clearButtonEnabled">
        <bool>false</bool>
       </property>
@@ -194,6 +242,12 @@
     </item>
     <item row="2" column="3">
      <widget class="QPushButton" name="printTextButton">
+      <property name="maximumSize">
+       <size>
+        <width>60</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="text">
        <string>Print</string>
       </property>
@@ -201,6 +255,12 @@
     </item>
     <item row="2" column="4">
      <widget class="QPushButton" name="printSalvageButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
        <string>Print Salvage</string>
       </property>
@@ -213,8 +273,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>463</width>
-     <height>20</height>
+     <width>480</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

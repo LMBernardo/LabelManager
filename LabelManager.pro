@@ -27,11 +27,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    settingswindow.cpp
+    settingswindow.cpp \
+    getstringdialog.cpp
 
 HEADERS += \
         mainwindow.h \
-    settingswindow.h
+    settingswindow.h \
+    getstringdialog.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -43,4 +45,5 @@ RESOURCES += \
 
 FORMS += \
     mainwindow.ui \
-    settingswindow.ui
+    settingswindow.ui \
+    getstringdialog.ui
