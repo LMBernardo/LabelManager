@@ -14,9 +14,9 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QCoreApplication::setOrganizationName("retco");
-    QCoreApplication::setOrganizationDomain("retnuh.us");
-    QCoreApplication::setApplicationName("LabelManager");
+//    QCoreApplication::setOrganizationName("retco");
+//    QCoreApplication::setOrganizationDomain("retnuh.us");
+//    QCoreApplication::setApplicationName("LabelManager");
 
 }
 
@@ -32,9 +32,12 @@ void SettingsWindow::initSettings(){
 
 void SettingsWindow::saveSettings(){
 
+    settings.sync();
+
     settings.beginGroup("MainSettings");
 
     settings.setValue("serverAddress", ui->addressLineEdit->text());
+    settings.setValue("printerName", ui->printerNameLineEdit->text());
     settings.setValue("printCommand", ui->printCommandLineEdit->text());
     QVariantMap lpnMap;
     for (int i = 0; i < ui->prefixComboBox->count(); i++){
@@ -54,9 +57,13 @@ void SettingsWindow::saveSettings(){
 
 void SettingsWindow::readSettings(){
 
+    settings.sync();
+
     settings.beginGroup("MainSettings");
 
     ui->addressLineEdit->setText( settings.value("serverAddress").toString() );
+        settings.setValue("printerName", ui->printerNameLineEdit->text());
+    ui->printerNameLineEdit->setText(settings.value("printerName").toString());
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
 
     QStringList prefixList;
@@ -71,7 +78,7 @@ void SettingsWindow::readSettings(){
     ui->paddingSpinBox->setValue( settings.value("lpnPadding").toInt() );
     ui->salvageLineEdit->setText( settings.value("salvageLabel").toString() );
     ui->remoteModeCheckbox->setChecked( settings.value("remoteMode").toBool() );
-    ui->lpnSpinBox->setValue( lpnMap[settings.value("currentPrefix").toString()].toInt() );
+    ui->lpnSpinBox->setValue( lpnMap.find(currentPrefix).value().toInt() );
 
     settings.endGroup();
 
@@ -90,7 +97,6 @@ void SettingsWindow::readSettings(){
 
 int SettingsWindow::getLPN(QString prefix){
     int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
-    qInfo() << "LPN:" << lpn;
     return lpn;
 }
 
@@ -111,23 +117,30 @@ void SettingsWindow::on_settingsDialogButtons_rejected()
 
 void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
 {
-    QStringList prefixes = {"LPN_"};
+    QVariantMap lpnMap;
     switch (ui->settingsDialogButtons->buttonRole(button)){
-
     case QDialogButtonBox::ResetRole:
         settings.beginGroup("MainSettings");
 
-        settings.setValue("serverAddress", "https://retnuh.us");
-        settings.setValue("labelPrefixList", prefixes);
-        settings.setValue("lpnPadding", 4);
-        settings.setValue("salvageLabel", "svsvsv");
-        settings.setValue("remoteMode", false);
+        if (ui->tabWidget->currentIndex() == 1){
+            settings.setValue("serverAddress", "https://retnuh.us");
+            settings.setValue("printerName", "");
+            settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
+        } else {
+            lpnMap.insert("LPN_", 1);
+            settings.setValue("lpnMap", lpnMap);
+            settings.setValue("lpnPadding", 4);
+            settings.setValue("salvageLabel", "svsvsv");
+            settings.setValue("remoteMode", false);
+            settings.setValue("currentPrefix", "LPN_");
+        }
+
         settings.endGroup();
 
         readSettings();
         break;
 
-     default:
+    default:
         break;
     }
 }
@@ -163,22 +176,27 @@ void SettingsWindow::on_submitted(QString prefix){
     if (ui->prefixComboBox->findText(prefix) == -1) ui->prefixComboBox->addItem(prefix);
 }
 
-void SettingsWindow::on_paddingSpinBox_valueChanged()
+void SettingsWindow::on_paddingSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+    emit(getLpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value()));
 }
 
-void SettingsWindow::on_prefixComboBox_currentIndexChanged()
+void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
 {
     if ( !init ) return;
-    emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+
+    settings.setValue("MainSettings/currentPrefix", text);
+    settings.sync();
+
+    ui->lpnSpinBox->setValue(getLPN(text));
+    emit(getLpnPrefix(text, ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
 
-void SettingsWindow::on_lpnSpinBox_valueChanged()
+void SettingsWindow::on_lpnSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+    emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value));
 }
 
 void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)

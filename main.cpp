@@ -8,6 +8,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QCoreApplication::setOrganizationName("retco");
+    QCoreApplication::setOrganizationDomain("retnuh.us");
+    QCoreApplication::setApplicationName("LabelManager");
+
     MainWindow w;
     w.initSettings();
     w.updateUi();

@@ -262,7 +262,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Print Salvage</string>
+       <string>Salvage</string>
       </property>
      </widget>
     </item>

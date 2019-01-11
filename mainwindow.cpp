@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QSettings>
 #include <QDebug>
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -24,11 +25,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initSettings(){
 
-    QCoreApplication::setOrganizationName("retco");
-    QCoreApplication::setOrganizationDomain("retnuh.us");
-    QCoreApplication::setApplicationName("LabelManager");
-    QSettings settings;
-
+    settings.sync();
     settings.beginGroup("MainSettings");
 
     if ( settings.allKeys().size() != 0 ) {
@@ -38,18 +35,24 @@ void MainWindow::initSettings(){
 
         if ( !settings.contains("serverAddress") ) {
             settings.setValue("serverAddress", "https://retnuh.us");
-            qInfo() << "Config error! Using server address: https://retnuh.us\n";
+            qInfo() << "Config error! Using server address: https://retnuh.us";
+        }
+
+
+        if ( !settings.contains("printerName") ) {
+            settings.setValue("printerName", "");
+            qInfo() << "Config error! Using printer name: ";
         }
 
         if ( !settings.contains("printCommand") ) {
-             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
-            qInfo() << "Config error! Using print command: /usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN\n";
+            settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
+            qInfo() << "Config error! Using print command: /usr/bin/print_label.sh $PRINTER_NAME";
         }
 
         if ( !settings.contains("lpnMap") ) {
             QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
             settings.setValue("lpnMap", lpnMap);
-            qInfo() << "Config error! Using LPN map: { \"LPN_\", 1 }\n";
+            qInfo() << "Config error! Using LPN map: { \"LPN_\", 1 }";
         }
 
         if ( !settings.contains("currentPrefix") ) {
@@ -59,23 +62,25 @@ void MainWindow::initSettings(){
 
         if ( !settings.contains("lpnPadding") ) {
             settings.setValue("lpnPadding", 4);
-            qInfo() << "Config error! Using LPN padding: 4\n";
+            qInfo() << "Config error! Using LPN padding: 4";
         }
 
         if ( !settings.contains("salvageLabel") ) {
             settings.setValue("salvageLabel", "svsvsv");
-            qInfo() << "Config error! Using salvage label: svsvsv\n";
+            qInfo() << "Config error! Using salvage label: svsvsv";
         }
 
         if ( !settings.contains("remoteMode") ) {
             settings.setValue("remoteMode", false);
-            qInfo() << "Config error! Using remote mode: false\n";
+            qInfo() << "Config error! Using remote mode: false";
         }
         qInfo() << "Configuration loaded.\n";
     } else {
-        qInfo() << "Config not found, using default settings.\n";
+        qInfo() << "Config not found, using default settings.";
         settings.setValue("serverAddress", "https://retnuh.us");
-        settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
+        settings.setValue("printerName", "");
+        settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
+
         QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
         settings.setValue("lpnMap", lpnMap);
         settings.setValue("lpnPadding", 4);
@@ -90,20 +95,18 @@ void MainWindow::initSettings(){
 
 void MainWindow::updateUi(){
 
-    QCoreApplication::setOrganizationName("retco");
-    QCoreApplication::setOrganizationDomain("retnuh.us");
-    QCoreApplication::setApplicationName("LabelManager");
-    QSettings settings;
+    settings.sync();
 
     settings.beginGroup("MainSettings");
 
     if (settings.value("remoteMode").toBool() ){
         ui->fetchLPNButton->setEnabled(true);
         ui->fetchSKUButton->setEnabled(true);
-        int currentLPN = settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt();
+        int currentLPN = getLPN(settings.value("currentPrefix").toString());
         QString lpnString = lpnPrefix(settings.value("currentPrefix").toString(), settings.value("lpnPadding").toInt(), currentLPN);
         lpnString.append(QString::number(currentLPN));
         ui->lpnLineEdit->setText(lpnString);
+        ui->skuLineEdit->setPlaceholderText("Fetch to populate");
         // Remote server code here
     } else {
         ui->fetchLPNButton->setEnabled(false);
@@ -111,10 +114,25 @@ void MainWindow::updateUi(){
         int currentLPN = settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt();
         QString lpnString = lpnPrefix(settings.value("currentPrefix").toString(), settings.value("lpnPadding").toInt(), currentLPN);
         lpnString.append(QString::number(currentLPN));
+        ui->skuLineEdit->setPlaceholderText("");
         ui->lpnLineEdit->setText(lpnString);
     }
 
     settings.endGroup();
+}
+
+int MainWindow::getLPN(QString prefix){
+    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
+    int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
+    return lpn;
+}
+
+QString MainWindow::getFullLPN(QString prefix){
+    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
+    int currentLPN = getLPN(prefix);
+    QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
+    lpnString.append(QString::number(currentLPN));
+    return lpnString;
 }
 
 QString MainWindow::lpnPrefix(QString prefix, int padding, int lpn){
@@ -127,6 +145,22 @@ QString MainWindow::lpnPrefix(QString prefix, int padding, int lpn){
 
 void MainWindow::on_getLpnPrefix(QString prefix, int padding, int lpn){
     emit lpnPrefixReturn(lpnPrefix(prefix, padding, lpn));
+}
+
+int MainWindow::printLabel(QString command, QString label){
+    //if (settings.)
+    QStringList commandList = command.split(" ");
+    QString program = commandList.at(0);
+    QStringList arguments;
+    for (int i = 1; i < commandList.size(); i++){
+        if (commandList.at(i) == "$PRINTER_NAME") arguments.push_back(settings.value("MainSettings/printerName").toString());
+        //else if (commandList.at(i) == "$FULL_LPN") arguments.push_back(ui->lpnLineEdit->text());
+        else arguments.push_back(commandList.at(i));
+    }
+    arguments.push_back(label);
+    qInfo() << "Command: " << program << arguments;
+    QProcess *printProcess = new QProcess(this);
+    return printProcess->execute(program, arguments);
 }
 
 void MainWindow::on_actionSettings_triggered()
@@ -143,4 +177,36 @@ void MainWindow::on_actionSettings_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     QApplication::quit();
+}
+
+void MainWindow::on_printLPNButton_released()
+{
+    QString prefix = settings.value("MainSettings/currentPrefix").toString();
+    QString lpnString = getFullLPN();
+
+    int status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
+    qInfo() << "Status:" << QString("%1").arg(QString::number(status));
+    if (status == 0){
+        QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
+        lpnMap.remove(prefix);
+        lpnMap.insert(prefix, getLPN(prefix)+1);
+        settings.setValue("MainSettings/lpnMap", lpnMap);
+        settings.sync();
+        updateUi();
+    }
+}
+
+void MainWindow::on_printSKUButton_released()
+{
+    printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
+}
+
+void MainWindow::on_printTextButton_released()
+{
+        printLabel(settings.value("MainSettings/printCommand").toString(), ui->textLineEdit->text());
+}
+
+void MainWindow::on_printSalvageButton_released()
+{
+    printLabel(settings.value("MainSettings/printCommand").toString(), settings.value("MainSettings/salvageLabel").toString());
 }

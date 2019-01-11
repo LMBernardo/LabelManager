@@ -40,13 +40,13 @@ private slots:
 
     void on_addPrefixButton_released();
 
-    //void on_paddingSpinBox_valueChanged(int value);
-    void on_paddingSpinBox_valueChanged();
+    void on_paddingSpinBox_valueChanged(int value);
+    //void on_paddingSpinBox_valueChanged();
 
-    //void on_prefixComboBox_currentIndexChanged(const QString &prefix);
-    void on_prefixComboBox_currentIndexChanged();
+    void on_prefixComboBox_currentIndexChanged(const QString &prefix);
+    //void on_prefixComboBox_currentIndexChanged();
 
-    void on_lpnSpinBox_valueChanged();
+    void on_lpnSpinBox_valueChanged(int value);
 
     void on_remoteModeCheckbox_stateChanged(int arg1);
 
