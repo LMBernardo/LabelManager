@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=LabelManager
+Comment=Prints labels
+Icon=
+Exec=/usr/bin/LabelManager
+Path=
+Terminal=false
+StartupNotify=false
+Categories=Utility;

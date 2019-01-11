@@ -36,9 +36,14 @@ HEADERS += \
     getstringdialog.h
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+ qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /usr/bin
 !isEmpty(target.path): INSTALLS += target
+
+# .desktop file
+desktop.path = ~/.local/share/applications/
+desktop.files = ./LabelManager.desktop
+INSTALLS += desktop
 
 RESOURCES += \
     resources.qrc
