@@ -40,8 +40,8 @@ void MainWindow::initSettings(){
 
 
         if ( !settings.contains("printerName") ) {
-            settings.setValue("printerName", "");
-            qInfo() << "Config error! Using printer name: ";
+            settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
+            qInfo() << "Config error! Using printer name: Zebra_Technologies_ZTC_ZP_500_";
         }
 
         if ( !settings.contains("printCommand") ) {
@@ -78,7 +78,7 @@ void MainWindow::initSettings(){
     } else {
         qInfo() << "Config not found, using default settings.";
         settings.setValue("serverAddress", "https://retnuh.us");
-        settings.setValue("printerName", "");
+        settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
         settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
 
         QVariantMap lpnMap; lpnMap.insert("LPN_", 1);

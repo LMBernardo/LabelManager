@@ -124,7 +124,7 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
 
         if (ui->tabWidget->currentIndex() == 1){
             settings.setValue("serverAddress", "https://retnuh.us");
-            settings.setValue("printerName", "");
+            settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
         } else {
             lpnMap.insert("LPN_", 1);
