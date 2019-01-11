@@ -107,6 +107,9 @@ void MainWindow::updateUi(){
         ui->fetchSKUButton->setEnabled(false);
         int currentLPN = settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt();
         QString lpnString = lpnPrefix(settings.value("currentPrefix").toString(), settings.value("lpnPadding").toInt(), currentLPN);
+        lpnString += QString(currentLPN);
+        qInfo() << currentLPN;
+        qInfo() << lpnString;
         ui->lpnLineEdit->setText(lpnString);
     }
 

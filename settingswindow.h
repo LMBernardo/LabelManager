@@ -49,6 +49,8 @@ private slots:
 
     void on_remoteModeCheckbox_stateChanged(int arg1);
 
+    void on_lpnSetButton_released();
+
 private:
     Ui::SettingsUI *ui;
     QSettings settings;

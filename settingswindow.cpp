@@ -75,9 +75,11 @@ void SettingsWindow::readSettings(){
     if (ui->remoteModeCheckbox->isChecked()){
         ui->addressLineEdit->setEnabled(true);
         ui->syncButton->setEnabled(true);
+        ui->lpnFetchButton->setEnabled(true);
     } else {
         ui->addressLineEdit->setEnabled(false);
-        ui->syncButton->setEnabled(true);
+        ui->syncButton->setEnabled(false);
+        ui->lpnFetchButton->setEnabled(false);
     }
 
     emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
@@ -175,8 +177,30 @@ void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)
     if (remoteMode){
         ui->addressLineEdit->setEnabled(true);
         ui->syncButton->setEnabled(true);
+        ui->lpnFetchButton->setEnabled(true);
     } else {
         ui->addressLineEdit->setEnabled(false);
         ui->syncButton->setEnabled(false);
+        ui->lpnFetchButton->setEnabled(false);
+    }
+}
+
+void SettingsWindow::on_lpnSetButton_released()
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Warning!");
+    msgBox.setText("Setting the current LPN will OVERWRITE the stored LPN for this prefix. Continue?");
+    msgBox.setModal(true);
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+
+    switch(msgBox.exec()){
+    case QMessageBox::Yes:
+        settings.value("MainSettings/lpnMap").toMap().find( ui->prefixComboBox->currentText() ).value().toMap().first().toInt();
+        qInfo() << settings.value("MainSettings/lpnMap").toMap();
+        break;
+
+    default:
+        break;
     }
 }
