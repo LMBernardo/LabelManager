@@ -48,6 +48,7 @@ void SettingsWindow::saveSettings(){
     settings.setValue("salvageLabel", ui->salvageLineEdit->text());
     settings.setValue("remoteMode", ui->remoteModeCheckbox->isChecked());
     settings.setValue("currentPrefix", ui->prefixComboBox->currentText());
+    settings.setValue("copyClipboard", ui->copyCheckbox->isChecked());
 
     settings.endGroup();
 
@@ -80,6 +81,7 @@ void SettingsWindow::readSettings(){
     ui->salvageLineEdit->setText( settings.value("salvageLabel").toString() );
     ui->remoteModeCheckbox->setChecked( settings.value("remoteMode").toBool() );
     ui->lpnSpinBox->setValue( lpnMap.find(currentPrefix).value().toInt() );
+    ui->copyCheckbox->setChecked( settings.value("copyClipboard").toBool() );
 
     settings.endGroup();
 
@@ -155,6 +157,7 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("salvageLabel", "svsvsv");
             settings.setValue("remoteMode", false);
             settings.setValue("currentPrefix", "LPN_");
+            settings.setValue("copyClipboard", true);
         }
 
         settings.endGroup();

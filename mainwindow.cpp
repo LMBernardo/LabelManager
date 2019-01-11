@@ -6,6 +6,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QProcess>
+#include <QClipboard>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -76,6 +77,12 @@ void MainWindow::initSettings(){
             settings.setValue("remoteMode", false);
             qInfo() << "Config error! Using remote mode: false";
         }
+
+        if ( !settings.contains("copyClipboard") ) {
+            settings.setValue("copyClipboard", true);
+            qInfo() << "Config error! Using copy to clipboard: true";
+        }
+
         qInfo() << "Configuration loaded.\n";
     } else {
         qInfo() << "Config not found, using default settings.";
@@ -89,6 +96,7 @@ void MainWindow::initSettings(){
         settings.setValue("salvageLabel", "svsvsv");
         settings.setValue("remoteMode", false);
         settings.setValue("currentPrefix", "LPN_");
+        settings.setValue("copyClipboard", true);
     }
 
     settings.endGroup();
@@ -195,12 +203,14 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_printLPNButton_released()
 {
     QSettings settings;
+    QClipboard *clipboard = QApplication::clipboard();
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
     QString lpnString = getFullLPN();
 
     int status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
     qInfo() << "Status:" << QString("%1").arg(QString::number(status));
     if (status == 0){
+        if (settings.value("MainSettings/copyClipboard").toBool()) clipboard->setText(lpnString);
         QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
         lpnMap.remove(prefix);
         lpnMap.insert(prefix, getLPN(prefix)+1);
