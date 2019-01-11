@@ -87,13 +87,15 @@ void MainWindow::initSettings(){
         settings.setValue("salvageLabel", "svsvsv");
         settings.setValue("remoteMode", false);
         settings.setValue("currentPrefix", "LPN_");
-        settings.sync();
     }
 
     settings.endGroup();
+    settings.sync();
 }
 
 void MainWindow::updateUi(){
+
+    qInfo() << "Updating MainWindow UI...";
 
     settings.sync();
 
@@ -111,9 +113,7 @@ void MainWindow::updateUi(){
     } else {
         ui->fetchLPNButton->setEnabled(false);
         ui->fetchSKUButton->setEnabled(false);
-        int currentLPN = settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt();
-        QString lpnString = lpnPrefix(settings.value("currentPrefix").toString(), settings.value("lpnPadding").toInt(), currentLPN);
-        lpnString.append(QString::number(currentLPN));
+        QString lpnString = getFullLPN(settings.value("currentPrefix").toString());
         ui->skuLineEdit->setPlaceholderText("");
         ui->lpnLineEdit->setText(lpnString);
     }

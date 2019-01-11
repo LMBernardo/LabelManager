@@ -32,6 +32,8 @@ void SettingsWindow::initSettings(){
 
 void SettingsWindow::saveSettings(){
 
+    qInfo() << "Saving settings...";
+
     settings.sync();
 
     settings.beginGroup("MainSettings");
@@ -41,7 +43,7 @@ void SettingsWindow::saveSettings(){
     settings.setValue("printCommand", ui->printCommandLineEdit->text());
     QVariantMap lpnMap;
     for (int i = 0; i < ui->prefixComboBox->count(); i++){
-        lpnMap.insert(ui->prefixComboBox->itemText(i), settings.value("lpnMap").toMap().find(ui->prefixComboBox->itemText(i)).value().toString());
+        lpnMap.insert(ui->prefixComboBox->itemText(i), getLPN(ui->prefixComboBox->itemText(i)));
     }
     settings.setValue("lpnMap", lpnMap);
     settings.setValue("lpnPadding", ui->paddingSpinBox->value());
@@ -62,7 +64,6 @@ void SettingsWindow::readSettings(){
     settings.beginGroup("MainSettings");
 
     ui->addressLineEdit->setText( settings.value("serverAddress").toString() );
-        settings.setValue("printerName", ui->printerNameLineEdit->text());
     ui->printerNameLineEdit->setText(settings.value("printerName").toString());
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
 
@@ -95,9 +96,27 @@ void SettingsWindow::readSettings(){
     emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
 
+QString SettingsWindow::lpnPrefix(QString prefix, int padding, int lpn){
+    int digits = 0; do { lpn /= 10; digits++; } while (lpn != 0);
+    for (int i = 0; i < padding - digits; i++){
+        prefix.append("0");
+    }
+    return prefix;
+}
+
+
 int SettingsWindow::getLPN(QString prefix){
+    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
     int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
     return lpn;
+}
+
+QString SettingsWindow::getFullLPN(QString prefix){
+    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
+    int currentLPN = getLPN(prefix);
+    QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
+    lpnString.append(QString::number(currentLPN));
+    return lpnString;
 }
 
 void SettingsWindow::on_lpnPrefixReturn(QString prefix){
@@ -224,7 +243,7 @@ void SettingsWindow::on_lpnSetButton_released()
     QVariantMap lpnMap;
     switch(msgBox.exec()){
     case QMessageBox::Yes:
-        lpnMap = settings.value("lpnMap").toMap();
+        lpnMap = settings.value("MainSettings/lpnMap").toMap();
         lpnMap.remove(ui->prefixComboBox->currentText());
         lpnMap.insert(ui->prefixComboBox->currentText(), ui->lpnSpinBox->value());
         settings.setValue("MainSettings/lpnMap", lpnMap);
