@@ -41,6 +41,11 @@ void MainWindow::initSettings(){
             qInfo() << "Config error! Using server address: https://retnuh.us\n";
         }
 
+        if ( !settings.contains("printCommand") ) {
+             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
+            qInfo() << "Config error! Using print command: /usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN\n";
+        }
+
         if ( !settings.contains("lpnMap") ) {
             QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
             settings.setValue("lpnMap", lpnMap);
@@ -70,12 +75,14 @@ void MainWindow::initSettings(){
     } else {
         qInfo() << "Config not found, using default settings.\n";
         settings.setValue("serverAddress", "https://retnuh.us");
+        settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
         QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
         settings.setValue("lpnMap", lpnMap);
         settings.setValue("lpnPadding", 4);
         settings.setValue("salvageLabel", "svsvsv");
         settings.setValue("remoteMode", false);
         settings.setValue("currentPrefix", "LPN_");
+        settings.sync();
     }
 
     settings.endGroup();

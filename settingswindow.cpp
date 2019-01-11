@@ -35,6 +35,7 @@ void SettingsWindow::saveSettings(){
     settings.beginGroup("MainSettings");
 
     settings.setValue("serverAddress", ui->addressLineEdit->text());
+    settings.setValue("printCommand", ui->printCommandLineEdit->text());
     QVariantMap lpnMap;
     for (int i = 0; i < ui->prefixComboBox->count(); i++){
         lpnMap.insert(ui->prefixComboBox->itemText(i), settings.value("lpnMap").toMap().find(ui->prefixComboBox->itemText(i)).value().toString());
@@ -56,6 +57,8 @@ void SettingsWindow::readSettings(){
     settings.beginGroup("MainSettings");
 
     ui->addressLineEdit->setText( settings.value("serverAddress").toString() );
+    ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
+
     QStringList prefixList;
     QVariantMap lpnMap = settings.value("lpnMap").toMap();
     for (auto it = lpnMap.begin(); it != lpnMap.end(); it++){
