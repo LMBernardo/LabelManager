@@ -25,6 +25,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::initSettings(){
 
+    QSettings settings;
+
     settings.sync();
     settings.beginGroup("MainSettings");
 
@@ -97,6 +99,8 @@ void MainWindow::updateUi(){
 
     qInfo() << "Updating MainWindow UI...";
 
+    QSettings settings;
+
     settings.sync();
 
     settings.beginGroup("MainSettings");
@@ -122,16 +126,24 @@ void MainWindow::updateUi(){
 }
 
 int MainWindow::getLPN(QString prefix){
+    QSettings settings;
+    settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
+    qInfo() << "Finding prefix:" << prefix;
     int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
+    qInfo() << "Returning LPN:" << QString("%1").arg(QString::number(lpn));
     return lpn;
 }
 
 QString MainWindow::getFullLPN(QString prefix){
+    QSettings settings;
+    settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
     int currentLPN = getLPN(prefix);
+    qInfo() << "Padding:" << QString("%1").arg(settings.value("MainSettings/lpnPadding").toInt());
     QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
     lpnString.append(QString::number(currentLPN));
+    qInfo() << "Returning LPN string:" << lpnString;
     return lpnString;
 }
 
@@ -148,7 +160,8 @@ void MainWindow::on_getLpnPrefix(QString prefix, int padding, int lpn){
 }
 
 int MainWindow::printLabel(QString command, QString label){
-    //if (settings.)
+    QSettings settings;
+    //if (settings.value("printCommand").toString() == ""
     QStringList commandList = command.split(" ");
     QString program = commandList.at(0);
     QStringList arguments;
@@ -181,6 +194,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_printLPNButton_released()
 {
+    QSettings settings;
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
     QString lpnString = getFullLPN();
 
@@ -198,15 +212,18 @@ void MainWindow::on_printLPNButton_released()
 
 void MainWindow::on_printSKUButton_released()
 {
+    QSettings settings;
     printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
 }
 
 void MainWindow::on_printTextButton_released()
 {
-        printLabel(settings.value("MainSettings/printCommand").toString(), ui->textLineEdit->text());
+    QSettings settings;
+    printLabel(settings.value("MainSettings/printCommand").toString(), ui->textLineEdit->text());
 }
 
 void MainWindow::on_printSalvageButton_released()
 {
+    QSettings settings;
     printLabel(settings.value("MainSettings/printCommand").toString(), settings.value("MainSettings/salvageLabel").toString());
 }

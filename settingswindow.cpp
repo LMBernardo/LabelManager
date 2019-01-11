@@ -14,10 +14,6 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    QCoreApplication::setOrganizationName("retco");
-//    QCoreApplication::setOrganizationDomain("retnuh.us");
-//    QCoreApplication::setApplicationName("LabelManager");
-
 }
 
 SettingsWindow::~SettingsWindow()
@@ -33,6 +29,8 @@ void SettingsWindow::initSettings(){
 void SettingsWindow::saveSettings(){
 
     qInfo() << "Saving settings...";
+
+    QSettings settings;
 
     settings.sync();
 
@@ -58,6 +56,8 @@ void SettingsWindow::saveSettings(){
 }
 
 void SettingsWindow::readSettings(){
+
+    QSettings settings;
 
     settings.sync();
 
@@ -106,12 +106,14 @@ QString SettingsWindow::lpnPrefix(QString prefix, int padding, int lpn){
 
 
 int SettingsWindow::getLPN(QString prefix){
+    QSettings settings;
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
     int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
     return lpn;
 }
 
 QString SettingsWindow::getFullLPN(QString prefix){
+    QSettings settings;
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
     int currentLPN = getLPN(prefix);
     QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
@@ -136,6 +138,7 @@ void SettingsWindow::on_settingsDialogButtons_rejected()
 
 void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
 {
+    QSettings settings;
     QVariantMap lpnMap;
     switch (ui->settingsDialogButtons->buttonRole(button)){
     case QDialogButtonBox::ResetRole:
@@ -204,6 +207,7 @@ void SettingsWindow::on_paddingSpinBox_valueChanged(int value)
 void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
 {
     if ( !init ) return;
+    QSettings settings;
 
     settings.setValue("MainSettings/currentPrefix", text);
     settings.sync();
@@ -240,6 +244,7 @@ void SettingsWindow::on_lpnSetButton_released()
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
 
+    QSettings settings;
     QVariantMap lpnMap;
     switch(msgBox.exec()){
     case QMessageBox::Yes:

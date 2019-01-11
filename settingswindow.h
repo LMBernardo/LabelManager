@@ -57,7 +57,6 @@ private slots:
 
 private:
     Ui::SettingsUI *ui;
-    QSettings settings;
 
     bool init = false;
 

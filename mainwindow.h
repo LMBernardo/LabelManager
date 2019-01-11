@@ -38,7 +38,6 @@ private slots:
 
 private:
     Ui::MainUI *ui;
-    QSettings settings;
     int getLPN(QString prefix = "");
     QString getFullLPN(QString prefix = "");
     QString lpnPrefix(QString prefix, int padding, int lpn);
