@@ -42,21 +42,14 @@ void MainWindow::initSettings(){
         }
 
         if ( !settings.contains("lpnMap") ) {
-            QVariantMap lpnMap; lpnMap.insert("LPN_", 0);
+            QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
             settings.setValue("lpnMap", lpnMap);
-            qInfo() << "Config error! Using LPN map: { \"LPN_\", 0 }\n";
+            qInfo() << "Config error! Using LPN map: { \"LPN_\", 1 }\n";
         }
 
         if ( !settings.contains("currentPrefix") ) {
             settings.setValue("currentPrefix", settings.value("lpnMap").toMap().begin().key() );
             qInfo() << "Config error! Using currentPrefix:" << settings.value("lpnMap").toMap().begin().key();
-        }
-
-        if ( !settings.contains("currentLPN")){
-            if (!settings.value("remoteMode").toBool()) {
-                settings.setValue("currentLPN", 0);
-                qInfo() << "Config error! currentLPN not found, using 0";
-            }
         }
 
         if ( !settings.contains("lpnPadding") ) {
@@ -77,7 +70,7 @@ void MainWindow::initSettings(){
     } else {
         qInfo() << "Config not found, using default settings.\n";
         settings.setValue("serverAddress", "https://retnuh.us");
-        QVariantMap lpnMap; lpnMap.insert("LPN_", 0);
+        QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
         settings.setValue("lpnMap", lpnMap);
         settings.setValue("lpnPadding", 4);
         settings.setValue("salvageLabel", "svsvsv");
@@ -100,16 +93,17 @@ void MainWindow::updateUi(){
     if (settings.value("remoteMode").toBool() ){
         ui->fetchLPNButton->setEnabled(true);
         ui->fetchSKUButton->setEnabled(true);
-        ui->lpnSpinBox->setValue(settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt());
+        int currentLPN = settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt();
+        QString lpnString = lpnPrefix(settings.value("currentPrefix").toString(), settings.value("lpnPadding").toInt(), currentLPN);
+        lpnString.append(QString::number(currentLPN));
+        ui->lpnLineEdit->setText(lpnString);
         // Remote server code here
     } else {
         ui->fetchLPNButton->setEnabled(false);
         ui->fetchSKUButton->setEnabled(false);
         int currentLPN = settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt();
         QString lpnString = lpnPrefix(settings.value("currentPrefix").toString(), settings.value("lpnPadding").toInt(), currentLPN);
-        lpnString += QString(currentLPN);
-        qInfo() << currentLPN;
-        qInfo() << lpnString;
+        lpnString.append(QString::number(currentLPN));
         ui->lpnLineEdit->setText(lpnString);
     }
 
@@ -118,7 +112,7 @@ void MainWindow::updateUi(){
 
 QString MainWindow::lpnPrefix(QString prefix, int padding, int lpn){
     int digits = 0; do { lpn /= 10; digits++; } while (lpn != 0);
-    for (int i = 0; i < padding+1 - digits; i++){
+    for (int i = 0; i < padding - digits; i++){
         prefix.append("0");
     }
     return prefix;

@@ -19,6 +19,7 @@ public:
     ~SettingsWindow();
 
     void initSettings();
+    int getLPN(QString prefix);
 
 signals:
     void getLpnPrefix(QString prefix = "", int padding = 0, int lpn = -1);

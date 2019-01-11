@@ -85,6 +85,12 @@ void SettingsWindow::readSettings(){
     emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
 
+int SettingsWindow::getLPN(QString prefix){
+    int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
+    qInfo() << "LPN:" << lpn;
+    return lpn;
+}
+
 void SettingsWindow::on_lpnPrefixReturn(QString prefix){
     ui->lpnSpinBox->setPrefix(prefix);
 }
@@ -112,7 +118,7 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
         settings.setValue("labelPrefixList", prefixes);
         settings.setValue("lpnPadding", 4);
         settings.setValue("salvageLabel", "svsvsv");
-        settings.setValue("remoteMode", true);
+        settings.setValue("remoteMode", false);
         settings.endGroup();
 
         readSettings();
@@ -194,13 +200,18 @@ void SettingsWindow::on_lpnSetButton_released()
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
 
+    QVariantMap lpnMap;
     switch(msgBox.exec()){
     case QMessageBox::Yes:
-        settings.value("MainSettings/lpnMap").toMap().find( ui->prefixComboBox->currentText() ).value().toMap().first().toInt();
-        qInfo() << settings.value("MainSettings/lpnMap").toMap();
+        lpnMap = settings.value("lpnMap").toMap();
+        lpnMap.remove(ui->prefixComboBox->currentText());
+        lpnMap.insert(ui->prefixComboBox->currentText(), ui->lpnSpinBox->value());
+        settings.setValue("MainSettings/lpnMap", lpnMap);
+        settings.sync();
         break;
 
     default:
+        ui->lpnSpinBox->setValue(getLPN(ui->prefixComboBox->currentText()));
         break;
     }
 }
