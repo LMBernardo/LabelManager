@@ -100,7 +100,22 @@ void MainWindow::initSettings(){
     }
 
     settings.endGroup();
-    settings.sync();
+
+    settings.beginGroup("UI");
+
+    if ( settings.allKeys().size() != 0 ) {
+        if ( !settings.contains("printQuantity") ) {
+            QVariantList printQuantity = {1, 1, 1};
+            settings.setValue("printQuantity", printQuantity);
+            qInfo() << "Config error! Using printQuantity: {1, 1, 1}";
+        }
+    } else {
+        QVariantList printQuantity = {1, 1, 1};
+        settings.setValue("printQuantity", printQuantity);
+    }
+
+
+    //settings.sync();
 }
 
 void MainWindow::updateUi(){
@@ -131,15 +146,21 @@ void MainWindow::updateUi(){
     }
 
     settings.endGroup();
+
+    settings.beginGroup("UI");
+    ui->lpnQuantitySpinBox->setValue( settings.value("printQuantity").toList().at(0).toInt() );
+    ui->skuQuantitySpinBox->setValue( settings.value("printQuantity").toList().at(1).toInt() );
+    ui->textQuantitySpinBox->setValue( settings.value("printQuantity").toList().at(2).toInt() );
+    settings.endGroup();
 }
 
 int MainWindow::getLPN(QString prefix){
     QSettings settings;
     settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
-    qInfo() << "Finding prefix:" << prefix;
+    //qInfo() << "Finding prefix:" << prefix;
     int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
-    qInfo() << "Returning LPN:" << QString("%1").arg(QString::number(lpn));
+    //qInfo() << "Returning LPN:" << QString("%1").arg(QString::number(lpn));
     return lpn;
 }
 
@@ -148,10 +169,10 @@ QString MainWindow::getFullLPN(QString prefix){
     settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
     int currentLPN = getLPN(prefix);
-    qInfo() << "Padding:" << QString("%1").arg(settings.value("MainSettings/lpnPadding").toInt());
+    //qInfo() << "Padding:" << QString("%1").arg(settings.value("MainSettings/lpnPadding").toInt());
     QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
     lpnString.append(QString::number(currentLPN));
-    qInfo() << "Returning LPN string:" << lpnString;
+    //qInfo() << "Returning LPN string:" << lpnString;
     return lpnString;
 }
 
@@ -206,8 +227,11 @@ void MainWindow::on_printLPNButton_released()
     QClipboard *clipboard = QApplication::clipboard();
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
     QString lpnString = getFullLPN();
-
-    int status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
+    int status;
+    for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){
+        status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
+        if ( status != 0 ) break;
+    }
     qInfo() << "Status:" << QString("%1").arg(QString::number(status));
     if (status == 0){
         if (settings.value("MainSettings/copyClipboard").toBool()) clipboard->setText(lpnString);
@@ -215,7 +239,7 @@ void MainWindow::on_printLPNButton_released()
         lpnMap.remove(prefix);
         lpnMap.insert(prefix, getLPN(prefix)+1);
         settings.setValue("MainSettings/lpnMap", lpnMap);
-        settings.sync();
+        //settings.sync();
         updateUi();
     }
 }
@@ -223,17 +247,45 @@ void MainWindow::on_printLPNButton_released()
 void MainWindow::on_printSKUButton_released()
 {
     QSettings settings;
-    printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
+    for (int i = 0; i < ui->skuQuantitySpinBox->value(); i++){
+        printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
+    }
 }
 
 void MainWindow::on_printTextButton_released()
 {
     QSettings settings;
-    printLabel(settings.value("MainSettings/printCommand").toString(), ui->textLineEdit->text());
+    for (int i = 0; i < ui->textQuantitySpinBox->value(); i++){
+        printLabel(settings.value("MainSettings/printCommand").toString(), ui->textLineEdit->text());
+    }
 }
 
 void MainWindow::on_printSalvageButton_released()
 {
     QSettings settings;
     printLabel(settings.value("MainSettings/printCommand").toString(), settings.value("MainSettings/salvageLabel").toString());
+}
+
+void MainWindow::on_lpnQuantitySpinBox_valueChanged(int qty)
+{
+    QSettings settings;
+    QVariantList printQuantity = settings.value("UI/printQuantity").toList();
+    printQuantity.replace(0, qty);
+    settings.setValue("UI/printQuantity", printQuantity);
+}
+
+void MainWindow::on_skuQuantitySpinBox_valueChanged(int qty)
+{
+    QSettings settings;
+    QVariantList printQuantity = settings.value("UI/printQuantity").toList();
+    printQuantity.replace(1, qty);
+    settings.setValue("UI/printQuantity", printQuantity);
+}
+
+void MainWindow::on_textQuantitySpinBox_valueChanged(int qty)
+{
+    QSettings settings;
+    QVariantList printQuantity = settings.value("UI/printQuantity").toList();
+    printQuantity.replace(2, qty);
+    settings.setValue("UI/printQuantity", printQuantity);
 }

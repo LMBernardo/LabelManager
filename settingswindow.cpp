@@ -52,7 +52,7 @@ void SettingsWindow::saveSettings(){
 
     settings.endGroup();
 
-    settings.sync();
+    //settings.sync();
 
 }
 
@@ -161,6 +161,8 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
         }
 
         settings.endGroup();
+
+        settings.sync();
 
         readSettings();
         break;

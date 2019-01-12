@@ -72,7 +72,7 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QSpinBox" name="lpnSpinBox">
+     <widget class="QSpinBox" name="lpnQuantitySpinBox">
       <property name="minimum">
        <number>1</number>
       </property>
@@ -156,7 +156,7 @@
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="QSpinBox" name="skuSpinBox">
+     <widget class="QSpinBox" name="skuQuantitySpinBox">
       <property name="minimum">
        <number>1</number>
       </property>
@@ -231,7 +231,7 @@
      </widget>
     </item>
     <item row="2" column="2">
-     <widget class="QSpinBox" name="textSpinBox">
+     <widget class="QSpinBox" name="textQuantitySpinBox">
       <property name="minimum">
        <number>1</number>
       </property>
@@ -274,7 +274,7 @@
      <x>0</x>
      <y>0</y>
      <width>480</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

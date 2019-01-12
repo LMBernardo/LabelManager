@@ -36,6 +36,12 @@ private slots:
 
     void on_printSalvageButton_released();
 
+    void on_lpnQuantitySpinBox_valueChanged(int arg1);
+
+    void on_skuQuantitySpinBox_valueChanged(int arg1);
+
+    void on_textQuantitySpinBox_valueChanged(int arg1);
+
 private:
     Ui::MainUI *ui;
     int getLPN(QString prefix = "");
