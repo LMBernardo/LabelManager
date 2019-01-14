@@ -41,6 +41,10 @@ void MainWindow::initSettings(){
             qInfo() << "Config error! Using server address: https://retnuh.us";
         }
 
+        if ( !settings.contains("printServer") ) {
+            settings.setValue("printServer", "localhost");
+            qInfo() << "Config error! Using print server: localhost";
+        }
 
         if ( !settings.contains("printerName") ) {
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
@@ -87,6 +91,7 @@ void MainWindow::initSettings(){
     } else {
         qInfo() << "Config not found, using default settings.";
         settings.setValue("serverAddress", "https://retnuh.us");
+        settings.setValue("printServer", "localhost");
         settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
         settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
 

@@ -37,6 +37,7 @@ void SettingsWindow::saveSettings(){
     settings.beginGroup("MainSettings");
 
     settings.setValue("serverAddress", ui->addressLineEdit->text());
+    settings.setValue("printServer", ui->printServerLineEdit->text());
     settings.setValue("printerName", ui->printerNameLineEdit->text());
     settings.setValue("printCommand", ui->printCommandLineEdit->text());
     QVariantMap lpnMap;
@@ -65,6 +66,7 @@ void SettingsWindow::readSettings(){
     settings.beginGroup("MainSettings");
 
     ui->addressLineEdit->setText( settings.value("serverAddress").toString() );
+    ui->printServerLineEdit->setText( settings.value("printServer").toString() );
     ui->printerNameLineEdit->setText(settings.value("printerName").toString());
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
 
@@ -148,6 +150,7 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
 
         if (ui->tabWidget->currentIndex() == 1){
             settings.setValue("serverAddress", "https://retnuh.us");
+            settings.setValue("printServer", "localhost");
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
         } else {
