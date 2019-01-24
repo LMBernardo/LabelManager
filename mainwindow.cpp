@@ -41,6 +41,16 @@ void MainWindow::initSettings(){
             qInfo() << "Config error! Using server address: https://retnuh.us";
         }
 
+        if ( !settings.contains("skuServer") ) {
+            settings.setValue("skuServer", true);
+            qInfo() << "Config error! Using SKU server: true";
+        }
+
+        if ( !settings.contains("skuServerAddress") ) {
+            settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
+            qInfo() << "Config error! Using SKU server address: http://skufindnr.retnuh.us";
+        }
+
         if ( !settings.contains("printServer") ) {
             settings.setValue("printServer", "localhost");
             qInfo() << "Config error! Using print server: localhost";
@@ -91,6 +101,7 @@ void MainWindow::initSettings(){
     } else {
         qInfo() << "Config not found, using default settings.";
         settings.setValue("serverAddress", "https://retnuh.us");
+        settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
         settings.setValue("printServer", "localhost");
         settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
         settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");

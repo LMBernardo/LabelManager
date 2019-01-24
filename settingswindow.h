@@ -55,6 +55,8 @@ private slots:
 
     void on_lpnSetButton_released();
 
+    void on_skuServerCheckbox_stateChanged(int arg1);
+
 private:
     Ui::SettingsUI *ui;
 

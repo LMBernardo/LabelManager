@@ -37,6 +37,8 @@ void SettingsWindow::saveSettings(){
     settings.beginGroup("MainSettings");
 
     settings.setValue("serverAddress", ui->addressLineEdit->text());
+    settings.setValue("skuServerAddress", ui->skuServerLineEdit->text());
+    settings.setValue("skuServer", ui->skuServerCheckbox->isChecked());
     settings.setValue("printServer", ui->printServerLineEdit->text());
     settings.setValue("printerName", ui->printerNameLineEdit->text());
     settings.setValue("printCommand", ui->printCommandLineEdit->text());
@@ -66,8 +68,10 @@ void SettingsWindow::readSettings(){
     settings.beginGroup("MainSettings");
 
     ui->addressLineEdit->setText( settings.value("serverAddress").toString() );
+    ui->skuServerLineEdit->setText( settings.value("skuServerAddress").toString() );
+    ui->skuServerCheckbox->setChecked( settings.value("skuServer").toBool() );
     ui->printServerLineEdit->setText( settings.value("printServer").toString() );
-    ui->printerNameLineEdit->setText(settings.value("printerName").toString());
+    ui->printerNameLineEdit->setText(settings.value("printerName").toString() );
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
 
     QStringList prefixList;
@@ -95,6 +99,12 @@ void SettingsWindow::readSettings(){
         ui->addressLineEdit->setEnabled(false);
         ui->syncButton->setEnabled(false);
         ui->lpnFetchButton->setEnabled(false);
+    }
+
+    if (ui->skuServerCheckbox->isChecked()){
+        ui->skuServerLineEdit->setEnabled(true);
+    } else {
+        ui->skuServerLineEdit->setEnabled(false);
     }
 
     emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
@@ -150,6 +160,8 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
 
         if (ui->tabWidget->currentIndex() == 1){
             settings.setValue("serverAddress", "https://retnuh.us");
+            settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
+            settings.setValue("skuServer", true);
             settings.setValue("printServer", "localhost");
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
@@ -266,5 +278,14 @@ void SettingsWindow::on_lpnSetButton_released()
     default:
         ui->lpnSpinBox->setValue(getLPN(ui->prefixComboBox->currentText()));
         break;
+    }
+}
+
+void SettingsWindow::on_skuServerCheckbox_stateChanged(int skuServer)
+{
+    if (skuServer) {
+        ui->skuServerLineEdit->setEnabled(true);
+    } else {
+        ui->skuServerLineEdit->setEnabled(false);
     }
 }
