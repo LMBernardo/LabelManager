@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QClipboard>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -42,8 +43,8 @@ void MainWindow::initSettings(){
         }
 
         if ( !settings.contains("skuServer") ) {
-            settings.setValue("skuServer", true);
-            qInfo() << "Config error! Using SKU server: true";
+            settings.setValue("skuServer", false);
+            qInfo() << "Config error! Using SKU server: false";
         }
 
         if ( !settings.contains("skuServerAddress") ) {
@@ -64,6 +65,11 @@ void MainWindow::initSettings(){
         if ( !settings.contains("printCommand") ) {
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             qInfo() << "Config error! Using print command: /usr/bin/print_label.sh $PRINTER_NAME";
+        }
+
+        if ( !settings.contains("usePrintCommand") ) {
+            settings.setValue("usePrintCommand", true);
+            qInfo() << "Config error! Using print command enabled: true";
         }
 
         if ( !settings.contains("lpnMap") ) {
@@ -101,10 +107,12 @@ void MainWindow::initSettings(){
     } else {
         qInfo() << "Config not found, using default settings.";
         settings.setValue("serverAddress", "https://retnuh.us");
+        settings.setValue("skuServer", false);
         settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
         settings.setValue("printServer", "localhost");
         settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
         settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
+        settings.setValue("usePrintCommand", true);
 
         QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
         settings.setValue("lpnMap", lpnMap);
@@ -206,19 +214,23 @@ void MainWindow::on_getLpnPrefix(QString prefix, int padding, int lpn){
 
 int MainWindow::printLabel(QString command, QString label){
     QSettings settings;
-    //if (settings.value("printCommand").toString() == ""
+    if (settings.value("MainSettings/usePrintCommand").toBool() == false) {
+        // Internal printing command here
+        return -9;
+    } else {
     QStringList commandList = command.split(" ");
     QString program = commandList.at(0);
     QStringList arguments;
     for (int i = 1; i < commandList.size(); i++){
-        if (commandList.at(i) == "$PRINTER_NAME") arguments.push_back(settings.value("MainSettings/printerName").toString());
+        if (commandList.at(i) == "$PRINTER_NAME") arguments.push_back("'" + settings.value("MainSettings/printerName").toString() + "'");
         //else if (commandList.at(i) == "$FULL_LPN") arguments.push_back(ui->lpnLineEdit->text());
         else arguments.push_back(commandList.at(i));
     }
-    arguments.push_back(label);
+    arguments.push_back("'" + label + "'");
     qInfo() << "Command: " << program << arguments;
     QProcess *printProcess = new QProcess(this);
     return printProcess->execute(program, arguments);
+    }
 }
 
 void MainWindow::on_actionSettings_triggered()
@@ -239,6 +251,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_printLPNButton_released()
 {
+    ui->printLPNButton->setEnabled(false);
     QSettings settings;
     QClipboard *clipboard = QApplication::clipboard();
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
@@ -257,29 +270,44 @@ void MainWindow::on_printLPNButton_released()
         settings.setValue("MainSettings/lpnMap", lpnMap);
         //settings.sync();
         updateUi();
+    } else {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Error!");
+        msgBox.setText("Print failed: Errno " + QString::number(status));
+        msgBox.setModal(true);
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
     }
+    ui->printLPNButton->setEnabled(true);
 }
 
 void MainWindow::on_printSKUButton_released()
 {
+    ui->printSKUButton->setEnabled(false);
     QSettings settings;
     for (int i = 0; i < ui->skuQuantitySpinBox->value(); i++){
         printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
     }
+    ui->printSKUButton->setEnabled(true);
 }
 
 void MainWindow::on_printTextButton_released()
 {
+    ui->printTextButton->setEnabled(false);
     QSettings settings;
     for (int i = 0; i < ui->textQuantitySpinBox->value(); i++){
         printLabel(settings.value("MainSettings/printCommand").toString(), ui->textLineEdit->text());
     }
+    ui->printTextButton->setEnabled(true);
 }
 
 void MainWindow::on_printSalvageButton_released()
 {
+    ui->printSalvageButton->setEnabled(false);
     QSettings settings;
     printLabel(settings.value("MainSettings/printCommand").toString(), settings.value("MainSettings/salvageLabel").toString());
+    ui->printSalvageButton->setEnabled(true);
 }
 
 void MainWindow::on_lpnQuantitySpinBox_valueChanged(int qty)

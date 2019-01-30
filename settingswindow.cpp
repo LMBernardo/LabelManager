@@ -42,6 +42,7 @@ void SettingsWindow::saveSettings(){
     settings.setValue("printServer", ui->printServerLineEdit->text());
     settings.setValue("printerName", ui->printerNameLineEdit->text());
     settings.setValue("printCommand", ui->printCommandLineEdit->text());
+    settings.setValue("usePrintCommand", ui->printCommandCheckbox->isChecked());
     QVariantMap lpnMap;
     for (int i = 0; i < ui->prefixComboBox->count(); i++){
         lpnMap.insert(ui->prefixComboBox->itemText(i), getLPN(ui->prefixComboBox->itemText(i)));
@@ -73,6 +74,8 @@ void SettingsWindow::readSettings(){
     ui->printServerLineEdit->setText( settings.value("printServer").toString() );
     ui->printerNameLineEdit->setText(settings.value("printerName").toString() );
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
+    ui->printCommandCheckbox->setChecked( settings.value("usePrintCommand").toBool() );
+
 
     QStringList prefixList;
     QVariantMap lpnMap = settings.value("lpnMap").toMap();
@@ -161,10 +164,11 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
         if (ui->tabWidget->currentIndex() == 1){
             settings.setValue("serverAddress", "https://retnuh.us");
             settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
-            settings.setValue("skuServer", true);
+            settings.setValue("skuServer", false);
             settings.setValue("printServer", "localhost");
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
+            settings.setValue("usePrintCommand", true);
         } else {
             lpnMap.insert("LPN_", 1);
             settings.setValue("lpnMap", lpnMap);

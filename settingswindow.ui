@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
-    <height>240</height>
+    <width>433</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -363,6 +363,9 @@
        </item>
        <item row="2" column="2">
         <widget class="QLineEdit" name="printServerLineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="placeholderText">
           <string/>
          </property>
@@ -467,10 +470,17 @@
        <item row="1" column="2">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="skuServerLineEdit"/>
+          <widget class="QLineEdit" name="skuServerLineEdit">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QCheckBox" name="skuServerCheckbox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="toolTip">
             <string>Fetch SKU from LPN</string>
            </property>
