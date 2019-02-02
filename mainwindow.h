@@ -19,11 +19,7 @@ public:
     void initSettings();
     void updateUi();
 
-signals:
-    void lpnPrefixReturn(QString prefix);
-
 private slots:
-    void on_getLpnPrefix(QString prefix, int padding, int lpn);
 
     void on_actionSettings_triggered();
     void on_actionExit_triggered();

@@ -110,7 +110,7 @@ void SettingsWindow::readSettings(){
         ui->skuServerLineEdit->setEnabled(false);
     }
 
-    emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+     ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
 
 QString SettingsWindow::lpnPrefix(QString prefix, int padding, int lpn){
@@ -136,10 +136,6 @@ QString SettingsWindow::getFullLPN(QString prefix){
     QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
     lpnString.append(QString::number(currentLPN));
     return lpnString;
-}
-
-void SettingsWindow::on_lpnPrefixReturn(QString prefix){
-    ui->lpnSpinBox->setPrefix(prefix);
 }
 
 void SettingsWindow::on_settingsDialogButtons_accepted()
@@ -225,7 +221,7 @@ void SettingsWindow::on_submitted(QString prefix){
 void SettingsWindow::on_paddingSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    emit(getLpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value()));
+    ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value()));
 }
 
 void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
@@ -237,13 +233,13 @@ void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
     settings.sync();
 
     ui->lpnSpinBox->setValue(getLPN(text));
-    emit(getLpnPrefix(text, ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+    ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
 
 void SettingsWindow::on_lpnSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    emit(getLpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value));
+    ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value));
 }
 
 void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)

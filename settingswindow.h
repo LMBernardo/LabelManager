@@ -24,13 +24,8 @@ public:
     int getLPN(QString prefix = "");
     QString getFullLPN(QString prefix = "");
 
-signals:
-    void getLpnPrefix(QString prefix = "", int padding = 0, int lpn = -1);
 
 private slots:
-
-    void on_lpnPrefixReturn(QString prefix);
-
     void on_submitted(QString);
 
     void on_settingsDialogButtons_accepted();

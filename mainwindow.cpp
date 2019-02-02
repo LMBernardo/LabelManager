@@ -8,6 +8,7 @@
 #include <QProcess>
 #include <QClipboard>
 #include <QMessageBox>
+#include <QTcpSocket>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -33,9 +34,6 @@ void MainWindow::initSettings(){
     settings.beginGroup("MainSettings");
 
     if ( settings.allKeys().size() != 0 ) {
-
-        //settings.value("lpnMap").toMap().find(settings.value("currentPrefix").toString()).value().toInt()
-
 
         if ( !settings.contains("serverAddress") ) {
             settings.setValue("serverAddress", "https://retnuh.us");
@@ -144,8 +142,6 @@ void MainWindow::initSettings(){
 
 void MainWindow::updateUi(){
 
-    qInfo() << "Updating MainWindow UI...";
-
     QSettings settings;
 
     settings.sync();
@@ -208,14 +204,11 @@ QString MainWindow::lpnPrefix(QString prefix, int padding, int lpn){
     return prefix;
 }
 
-void MainWindow::on_getLpnPrefix(QString prefix, int padding, int lpn){
-    emit lpnPrefixReturn(lpnPrefix(prefix, padding, lpn));
-}
-
 int MainWindow::printLabel(QString command, QString label){
     QSettings settings;
     if (settings.value("MainSettings/usePrintCommand").toBool() == false) {
-        // Internal printing command here
+         QTcpSocket sock;
+
         return -9;
     } else {
     QStringList commandList = command.split(" ");
@@ -236,8 +229,6 @@ int MainWindow::printLabel(QString command, QString label){
 void MainWindow::on_actionSettings_triggered()
 {
     SettingsWindow s;
-    connect(&s, SIGNAL(getLpnPrefix(QString, int, int)), this, SLOT(on_getLpnPrefix(QString, int, int)));
-    connect(this, SIGNAL(lpnPrefixReturn(QString)), &s, SLOT(on_lpnPrefixReturn(QString)));
     s.initSettings();
     s.exec();
     updateUi();
@@ -256,7 +247,7 @@ void MainWindow::on_printLPNButton_released()
     QClipboard *clipboard = QApplication::clipboard();
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
     QString lpnString = getFullLPN();
-    int status;
+    int status = 0;
     for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){
         status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
         if ( status != 0 ) break;
