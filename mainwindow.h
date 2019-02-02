@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QFileSystemWatcher>
 #include <QMainWindow>
 #include <QSettings>
 
@@ -21,7 +22,10 @@ public:
 
 private slots:
 
+    void on_settingsChange(const QString sFile);
+
     void on_actionSettings_triggered();
+
     void on_actionExit_triggered();
 
     void on_printLPNButton_released();
@@ -40,6 +44,8 @@ private slots:
 
 private:
     Ui::MainUI *ui;
+    QFileSystemWatcher settingsWatcher;
+
     int getLPN(QString prefix = "");
     QString getFullLPN(QString prefix = "");
     QString lpnPrefix(QString prefix, int padding, int lpn);

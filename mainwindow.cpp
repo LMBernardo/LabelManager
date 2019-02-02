@@ -8,7 +8,6 @@
 #include <QProcess>
 #include <QClipboard>
 #include <QMessageBox>
-#include <QTcpSocket>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -136,8 +135,18 @@ void MainWindow::initSettings(){
         settings.setValue("printQuantity", printQuantity);
     }
 
+    // Watch settings file for changes
+    settingsWatcher.addPath(settings.fileName());
+    connect(&settingsWatcher, SIGNAL(fileChanged(const QString)), this, SLOT(on_settingsChange(const QString)));
 
     //settings.sync();
+}
+
+void MainWindow::on_settingsChange(const QString sFile){
+    qInfo() << "Settings file changed, updating..";
+    // Watch file again in case file has been updated by being replaced
+    settingsWatcher.addPath(sFile);
+    updateUi();
 }
 
 void MainWindow::updateUi(){
@@ -151,19 +160,16 @@ void MainWindow::updateUi(){
     if (settings.value("remoteMode").toBool() ){
         ui->fetchLPNButton->setEnabled(true);
         ui->fetchSKUButton->setEnabled(true);
-        int currentLPN = getLPN(settings.value("currentPrefix").toString());
-        QString lpnString = lpnPrefix(settings.value("currentPrefix").toString(), settings.value("lpnPadding").toInt(), currentLPN);
-        lpnString.append(QString::number(currentLPN));
-        ui->lpnLineEdit->setText(lpnString);
         ui->skuLineEdit->setPlaceholderText("Fetch to populate");
         // Remote server code here
     } else {
         ui->fetchLPNButton->setEnabled(false);
         ui->fetchSKUButton->setEnabled(false);
-        QString lpnString = getFullLPN(settings.value("currentPrefix").toString());
         ui->skuLineEdit->setPlaceholderText("");
-        ui->lpnLineEdit->setText(lpnString);
     }
+
+    QString lpnString = getFullLPN(settings.value("currentPrefix").toString());
+    ui->lpnLineEdit->setText(lpnString);
 
     settings.endGroup();
 
@@ -207,8 +213,6 @@ QString MainWindow::lpnPrefix(QString prefix, int padding, int lpn){
 int MainWindow::printLabel(QString command, QString label){
     QSettings settings;
     if (settings.value("MainSettings/usePrintCommand").toBool() == false) {
-         QTcpSocket sock;
-
         return -9;
     } else {
     QStringList commandList = command.split(" ");
@@ -229,6 +233,8 @@ int MainWindow::printLabel(QString command, QString label){
 void MainWindow::on_actionSettings_triggered()
 {
     SettingsWindow s;
+    s.setFixedHeight(225);
+    //s.setFixedWidth(415);
     s.initSettings();
     s.exec();
     updateUi();

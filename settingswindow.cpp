@@ -24,6 +24,11 @@ SettingsWindow::~SettingsWindow()
 void SettingsWindow::initSettings(){
     readSettings();
     init = true;
+
+    // Hide unused skuServer functionality
+    ui->skuServerLabel->setHidden(true);
+    ui->skuServerCheckbox->setHidden(true);
+    ui->skuServerLineEdit->setHidden(true);
 }
 
 void SettingsWindow::saveSettings(){
