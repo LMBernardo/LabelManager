@@ -223,7 +223,7 @@ int MainWindow::printLabel(QString command, QString label){
         //else if (commandList.at(i) == "$FULL_LPN") arguments.push_back(ui->lpnLineEdit->text());
         else arguments.push_back(commandList.at(i));
     }
-    arguments.push_back("'" + label + "'");
+    arguments.push_back(label);
     qInfo() << "Command: " << program << arguments;
     QProcess *printProcess = new QProcess(this);
     return printProcess->execute(program, arguments);
