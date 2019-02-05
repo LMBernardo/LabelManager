@@ -219,7 +219,7 @@ int MainWindow::printLabel(QString command, QString label){
     QString program = commandList.at(0);
     QStringList arguments;
     for (int i = 1; i < commandList.size(); i++){
-        if (commandList.at(i) == "$PRINTER_NAME") arguments.push_back("'" + settings.value("MainSettings/printerName").toString() + "'");
+        if (commandList.at(i) == "$PRINTER_NAME") arguments.push_back(settings.value("MainSettings/printerName").toString());
         //else if (commandList.at(i) == "$FULL_LPN") arguments.push_back(ui->lpnLineEdit->text());
         else arguments.push_back(commandList.at(i));
     }

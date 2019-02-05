@@ -29,6 +29,9 @@ void SettingsWindow::initSettings(){
     ui->skuServerLabel->setHidden(true);
     ui->skuServerCheckbox->setHidden(true);
     ui->skuServerLineEdit->setHidden(true);
+
+    // Only accept numbers and letters in printer name
+    ui->printerNameLineEdit->setValidator( new QRegExpValidator(QRegExp("[0-9][a-zA-Z]")) );
 }
 
 void SettingsWindow::saveSettings(){
