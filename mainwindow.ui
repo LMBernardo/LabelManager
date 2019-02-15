@@ -95,9 +95,12 @@
      </widget>
     </item>
     <item row="0" column="4">
-     <widget class="QPushButton" name="fetchLPNButton">
+     <widget class="QPushButton" name="reprintLPNButton">
+      <property name="toolTip">
+       <string>Reprint previous LPN</string>
+      </property>
       <property name="text">
-       <string>Fetch</string>
+       <string>Reprint</string>
       </property>
      </widget>
     </item>

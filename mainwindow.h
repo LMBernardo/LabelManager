@@ -42,6 +42,8 @@ private slots:
 
     void on_textQuantitySpinBox_valueChanged(int arg1);
 
+    void on_reprintLPNButton_released();
+
 private:
     Ui::MainUI *ui;
     QFileSystemWatcher settingsWatcher;

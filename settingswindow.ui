@@ -59,7 +59,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="labelSettingsTab">
       <property name="maximumSize">
@@ -353,7 +353,7 @@
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QLabel" name="addressLabel">
+        <widget class="QLabel" name="remoteLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -407,7 +407,7 @@
        <item row="0" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLineEdit" name="addressLineEdit">
+          <widget class="QLineEdit" name="remoteLineEdit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -417,10 +417,13 @@
            <property name="placeholderText">
             <string/>
            </property>
+           <property name="clearButtonEnabled">
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="syncButton">
+          <widget class="QPushButton" name="remoteSyncButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -442,7 +445,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="remoteModeCheckbox">
+          <widget class="QCheckBox" name="remoteCheckbox">
            <property name="enabled">
             <bool>false</bool>
            </property>

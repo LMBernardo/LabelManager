@@ -14,6 +14,15 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Not yet implemented
+    ui->skuServerLabel->setVisible(false);
+    ui->skuServerLineEdit->setVisible(false);
+    ui->skuServerLineEdit->setVisible(false);
+
+    ui->remoteLabel->setVisible(false);
+    ui->remoteLineEdit->setVisible(false);
+    ui->remoteSyncButton->setVisible(false);
+    ui->remoteCheckbox->setVisible(false);
 }
 
 SettingsWindow::~SettingsWindow()
@@ -44,7 +53,7 @@ void SettingsWindow::saveSettings(){
 
     settings.beginGroup("MainSettings");
 
-    settings.setValue("serverAddress", ui->addressLineEdit->text());
+    settings.setValue("serverAddress", ui->remoteLineEdit->text());
     settings.setValue("skuServerAddress", ui->skuServerLineEdit->text());
     settings.setValue("skuServer", ui->skuServerCheckbox->isChecked());
     settings.setValue("printServer", ui->printServerLineEdit->text());
@@ -58,7 +67,7 @@ void SettingsWindow::saveSettings(){
     settings.setValue("lpnMap", lpnMap);
     settings.setValue("lpnPadding", ui->paddingSpinBox->value());
     settings.setValue("salvageLabel", ui->salvageLineEdit->text());
-    settings.setValue("remoteMode", ui->remoteModeCheckbox->isChecked());
+    settings.setValue("remoteMode", ui->remoteCheckbox->isChecked());
     settings.setValue("currentPrefix", ui->prefixComboBox->currentText());
     settings.setValue("copyClipboard", ui->copyCheckbox->isChecked());
 
@@ -76,7 +85,7 @@ void SettingsWindow::readSettings(){
 
     settings.beginGroup("MainSettings");
 
-    ui->addressLineEdit->setText( settings.value("serverAddress").toString() );
+    ui->remoteLineEdit->setText( settings.value("serverAddress").toString() );
     ui->skuServerLineEdit->setText( settings.value("skuServerAddress").toString() );
     ui->skuServerCheckbox->setChecked( settings.value("skuServer").toBool() );
     ui->printServerLineEdit->setText( settings.value("printServer").toString() );
@@ -96,19 +105,19 @@ void SettingsWindow::readSettings(){
     ui->prefixComboBox->setCurrentIndex(index);
     ui->paddingSpinBox->setValue( settings.value("lpnPadding").toInt() );
     ui->salvageLineEdit->setText( settings.value("salvageLabel").toString() );
-    ui->remoteModeCheckbox->setChecked( settings.value("remoteMode").toBool() );
+    ui->remoteCheckbox->setChecked( settings.value("remoteMode").toBool() );
     ui->lpnSpinBox->setValue( lpnMap.find(currentPrefix).value().toInt() );
     ui->copyCheckbox->setChecked( settings.value("copyClipboard").toBool() );
 
     settings.endGroup();
 
-    if (ui->remoteModeCheckbox->isChecked()){
-        ui->addressLineEdit->setEnabled(true);
-        ui->syncButton->setEnabled(true);
+    if (ui->remoteCheckbox->isChecked()){
+        ui->remoteLineEdit->setEnabled(true);
+        ui->remoteSyncButton->setEnabled(true);
         ui->lpnFetchButton->setEnabled(true);
     } else {
-        ui->addressLineEdit->setEnabled(false);
-        ui->syncButton->setEnabled(false);
+        ui->remoteLineEdit->setEnabled(false);
+        ui->remoteSyncButton->setEnabled(false);
         ui->lpnFetchButton->setEnabled(false);
     }
 
@@ -253,12 +262,12 @@ void SettingsWindow::on_lpnSpinBox_valueChanged(int value)
 void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)
 {
     if (remoteMode){
-        ui->addressLineEdit->setEnabled(true);
-        ui->syncButton->setEnabled(true);
+        ui->remoteLineEdit->setEnabled(true);
+        ui->remoteSyncButton->setEnabled(true);
         ui->lpnFetchButton->setEnabled(true);
     } else {
-        ui->addressLineEdit->setEnabled(false);
-        ui->syncButton->setEnabled(false);
+        ui->remoteLineEdit->setEnabled(false);
+        ui->remoteSyncButton->setEnabled(false);
         ui->lpnFetchButton->setEnabled(false);
     }
 }

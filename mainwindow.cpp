@@ -158,12 +158,12 @@ void MainWindow::updateUi(){
     settings.beginGroup("MainSettings");
 
     if (settings.value("remoteMode").toBool() ){
-        ui->fetchLPNButton->setEnabled(true);
+        //ui->fetchLPNButton->setEnabled(true);
         ui->fetchSKUButton->setEnabled(true);
         ui->skuLineEdit->setPlaceholderText("Fetch to populate");
         // Remote server code here
     } else {
-        ui->fetchLPNButton->setEnabled(false);
+        //ui->fetchLPNButton->setEnabled(false);
         ui->fetchSKUButton->setEnabled(false);
         ui->skuLineEdit->setPlaceholderText("");
     }
@@ -329,4 +329,18 @@ void MainWindow::on_textQuantitySpinBox_valueChanged(int qty)
     QVariantList printQuantity = settings.value("UI/printQuantity").toList();
     printQuantity.replace(2, qty);
     settings.setValue("UI/printQuantity", printQuantity);
+}
+
+void MainWindow::on_reprintLPNButton_released()
+{
+    QSettings settings;
+    QString prefix = settings.value("MainSettings/currentPrefix").toString();
+    int prevLPN = getLPN(prefix)-1;
+    QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), prevLPN);
+    lpnString.append(QString::number(prevLPN));
+    ui->reprintLPNButton->setEnabled(false);
+    for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){
+        printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
+    }
+    ui->reprintLPNButton->setEnabled(true);
 }
