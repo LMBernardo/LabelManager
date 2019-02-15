@@ -195,19 +195,17 @@ QString MainWindow::getFullLPN(QString prefix){
     settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
     int currentLPN = getLPN(prefix);
-    //qInfo() << "Padding:" << QString("%1").arg(settings.value("MainSettings/lpnPadding").toInt());
     QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
-    lpnString.append(QString::number(currentLPN));
-    //qInfo() << "Returning LPN string:" << lpnString;
     return lpnString;
 }
 
 QString MainWindow::lpnPrefix(QString prefix, int padding, int lpn){
+    int lpnInit = lpn;
     int digits = 0; do { lpn /= 10; digits++; } while (lpn != 0);
     for (int i = 0; i < padding - digits; i++){
         prefix.append("0");
     }
-    return prefix;
+    return prefix + QString::number(lpnInit);
 }
 
 int MainWindow::printLabel(QString command, QString label){
