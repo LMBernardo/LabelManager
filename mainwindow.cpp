@@ -244,6 +244,11 @@ void MainWindow::on_actionExit_triggered()
     QApplication::quit();
 }
 
+//void MainWindow::on_lpnLineEdit_returnPressed()
+//{
+//    emit on_printLPNButton_released();
+//}
+
 void MainWindow::on_printLPNButton_released()
 {
     ui->printLPNButton->setEnabled(false);
@@ -277,6 +282,11 @@ void MainWindow::on_printLPNButton_released()
     ui->printLPNButton->setEnabled(true);
 }
 
+void MainWindow::on_skuLineEdit_returnPressed()
+{
+    emit on_printSKUButton_released();
+}
+
 void MainWindow::on_printSKUButton_released()
 {
     ui->printSKUButton->setEnabled(false);
@@ -285,6 +295,11 @@ void MainWindow::on_printSKUButton_released()
         printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
     }
     ui->printSKUButton->setEnabled(true);
+}
+
+void MainWindow::on_textLineEdit_returnPressed()
+{
+    emit on_printTextButton_released();
 }
 
 void MainWindow::on_printTextButton_released()
@@ -342,3 +357,5 @@ void MainWindow::on_reprintLPNButton_released()
     }
     ui->reprintLPNButton->setEnabled(true);
 }
+
+

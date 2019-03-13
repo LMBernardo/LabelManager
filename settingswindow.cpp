@@ -180,7 +180,7 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("skuServer", false);
             settings.setValue("printServer", "localhost");
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
-            settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME $FULL_LPN");
+            settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             settings.setValue("usePrintCommand", true);
         } else {
             lpnMap.insert("LPN_", 1);

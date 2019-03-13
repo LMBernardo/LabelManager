@@ -44,6 +44,12 @@ private slots:
 
     void on_reprintLPNButton_released();
 
+    void on_lpnLineEdit_returnPressed();
+
+    void on_skuLineEdit_returnPressed();
+
+    void on_textLineEdit_returnPressed();
+
 private:
     Ui::MainUI *ui;
     QFileSystemWatcher settingsWatcher;
