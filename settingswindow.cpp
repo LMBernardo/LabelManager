@@ -34,6 +34,9 @@ void SettingsWindow::initSettings(){
     readSettings();
     init = true;
 
+    // Select proper tab
+    ui->tabWidget->setCurrentIndex(0);
+
     // Hide unused skuServer functionality
     ui->skuServerLabel->setHidden(true);
     ui->skuServerCheckbox->setHidden(true);
@@ -99,6 +102,7 @@ void SettingsWindow::readSettings(){
     for (auto it = lpnMap.begin(); it != lpnMap.end(); it++){
         prefixList.push_back(it.key());
     }
+    ui->prefixComboBox->clear();
     ui->prefixComboBox->addItems( prefixList );
     QString currentPrefix = settings.value("currentPrefix").toString();
     int index = ui->prefixComboBox->findText(currentPrefix);
@@ -169,10 +173,12 @@ void SettingsWindow::on_settingsDialogButtons_rejected()
 void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
 {
     QSettings settings;
-    QVariantMap lpnMap;
+    //QVariantMap lpnMap;
     switch (ui->settingsDialogButtons->buttonRole(button)){
     case QDialogButtonBox::ResetRole:
         settings.beginGroup("MainSettings");
+
+        //lpnMap = settings.value("lpnMap").toMap();
 
         if (ui->tabWidget->currentIndex() == 1){
             settings.setValue("serverAddress", "https://retnuh.us");
@@ -183,12 +189,12 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             settings.setValue("usePrintCommand", true);
         } else {
-            lpnMap.insert("LPN_", 1);
-            settings.setValue("lpnMap", lpnMap);
+            //lpnMap.insert("LPN_", 1);
+            //settings.setValue("lpnMap", lpnMap);
             settings.setValue("lpnPadding", 4);
             settings.setValue("salvageLabel", "svsvsv");
             settings.setValue("remoteMode", false);
-            settings.setValue("currentPrefix", "LPN_");
+            //settings.setValue("currentPrefix", "LPN_");
             settings.setValue("copyClipboard", true);
         }
 
@@ -212,10 +218,11 @@ void SettingsWindow::on_deletePrefixButton_released()
     msgBox.setModal(true);
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
-
+    QSettings settings;
     switch(msgBox.exec()){
 
     case QMessageBox::Yes:
+        settings.setValue("MainSettings/currentPrefix", "");
         ui->prefixComboBox->removeItem(ui->prefixComboBox->currentIndex());
         break;
 
@@ -233,6 +240,7 @@ void SettingsWindow::on_addPrefixButton_released()
 
 void SettingsWindow::on_submitted(QString prefix){
     if (ui->prefixComboBox->findText(prefix) == -1) ui->prefixComboBox->addItem(prefix);
+    ui->prefixComboBox->setCurrentIndex(ui->prefixComboBox->findText(prefix));
 }
 
 void SettingsWindow::on_paddingSpinBox_valueChanged(int value)
