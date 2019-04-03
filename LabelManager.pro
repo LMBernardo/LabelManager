@@ -28,12 +28,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     settingswindow.cpp \
-    getstringdialog.cpp
+    getstringdialog.cpp \
+    labelserver.cpp \
+    labelclient.cpp
 
 HEADERS += \
         mainwindow.h \
     settingswindow.h \
-    getstringdialog.h
+    getstringdialog.h \
+    labelserver.h \
+    labelclient.h
 
 # Default rules for deployment.
  qnx: target.path = /tmp/$${TARGET}/bin
