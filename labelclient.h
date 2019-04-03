@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QAbstractSocket>
 #include <QDataStream>
 
 class labelClient : public QObject

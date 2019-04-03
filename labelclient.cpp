@@ -21,9 +21,14 @@ void labelClient::sendData(){
 }
 
 void labelClient::connectError(QAbstractSocket::SocketError error){
-    qInfo() << "Socket error:" << error;
+    qWarning() << "Socket error:" << error;
 }
 
 void labelClient::readReply(){
     qInfo() << in;
+}
+
+void labelClient::connectionOpened(){
+    qInfo() << "Connected to server.";
+    sendData();
 }

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -37,7 +37,8 @@ HEADERS += \
     settingswindow.h \
     getstringdialog.h \
     labelserver.h \
-    labelclient.h
+    labelclient.h \
+    utils.h
 
 # Default rules for deployment.
  qnx: target.path = /tmp/$${TARGET}/bin

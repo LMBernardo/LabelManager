@@ -15,9 +15,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // Not yet implemented
-    ui->skuServerLabel->setVisible(false);
-    ui->skuServerLineEdit->setVisible(false);
-    ui->skuServerLineEdit->setVisible(false);
+    //ui->skuServerLabel->setVisible(false);
+    //ui->skuServerLineEdit->setVisible(false);
 
     ui->remoteLabel->setVisible(false);
     ui->remoteLineEdit->setVisible(false);
@@ -38,9 +37,9 @@ void SettingsWindow::initSettings(){
     ui->tabWidget->setCurrentIndex(0);
 
     // Hide unused skuServer functionality
-    ui->skuServerLabel->setHidden(true);
-    ui->skuServerCheckbox->setHidden(true);
-    ui->skuServerLineEdit->setHidden(true);
+    //ui->skuServerLabel->setHidden(true);
+    //ui->skuServerCheckbox->setHidden(true);
+    //ui->skuServerLineEdit->setHidden(true);
 
     // Only accept numbers and letters in printer name
     //ui->printerNameLineEdit->setValidator( new QRegExpValidator(QRegExp("[0-9][a-zA-Z]")) );
@@ -57,7 +56,7 @@ void SettingsWindow::saveSettings(){
     settings.beginGroup("MainSettings");
 
     settings.setValue("serverAddress", ui->remoteLineEdit->text());
-    settings.setValue("skuServerAddress", ui->skuServerLineEdit->text());
+    //settings.setValue("skuServerAddress", ui->skuServerLineEdit->text());
     settings.setValue("skuServer", ui->skuServerCheckbox->isChecked());
     settings.setValue("printServer", ui->printServerLineEdit->text());
     settings.setValue("printerName", ui->printerNameLineEdit->text());
@@ -89,7 +88,7 @@ void SettingsWindow::readSettings(){
     settings.beginGroup("MainSettings");
 
     ui->remoteLineEdit->setText( settings.value("serverAddress").toString() );
-    ui->skuServerLineEdit->setText( settings.value("skuServerAddress").toString() );
+    //ui->skuServerLineEdit->setText( settings.value("skuServerAddress").toString() );
     ui->skuServerCheckbox->setChecked( settings.value("skuServer").toBool() );
     ui->printServerLineEdit->setText( settings.value("printServer").toString() );
     ui->printerNameLineEdit->setText(settings.value("printerName").toString() );
@@ -125,11 +124,11 @@ void SettingsWindow::readSettings(){
         ui->lpnFetchButton->setEnabled(false);
     }
 
-    if (ui->skuServerCheckbox->isChecked()){
-        ui->skuServerLineEdit->setEnabled(true);
-    } else {
-        ui->skuServerLineEdit->setEnabled(false);
-    }
+//    if (ui->skuServerCheckbox->isChecked()){
+//        ui->skuServerLineEdit->setEnabled(true);
+//    } else {
+//        ui->skuServerLineEdit->setEnabled(false);
+//    }
 
      ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
@@ -308,9 +307,10 @@ void SettingsWindow::on_lpnSetButton_released()
 
 void SettingsWindow::on_skuServerCheckbox_stateChanged(int skuServer)
 {
-    if (skuServer) {
-        ui->skuServerLineEdit->setEnabled(true);
-    } else {
-        ui->skuServerLineEdit->setEnabled(false);
-    }
+    (void) skuServer;
+//    if (skuServer) {
+//        ui->skuServerLineEdit->setEnabled(true);
+//    } else {
+//        ui->skuServerLineEdit->setEnabled(false);
+//    }
 }

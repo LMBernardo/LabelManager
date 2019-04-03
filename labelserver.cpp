@@ -5,7 +5,7 @@ labelServer::labelServer(QObject *parent) : QObject(parent)
     tcpServer = new QTcpServer(this);
     if (!tcpServer->listen(QHostAddress::Any, 9754)) {
         QString netError = "Failed to listen on port!" + tcpServer->errorString();
-        qInfo() << netError;
+        qCritical() << netError;
         tcpServer->close();
         return;
     }

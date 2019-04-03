@@ -6,6 +6,7 @@
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QNetworkInterface>
+#include <QtNetwork/QHostAddress>
 #include <QMessageBox>
 
 class labelServer : public QObject
@@ -21,7 +22,6 @@ signals:
 
 public slots:
     void clientConnected();
-    void statusReply();
     void clientReadyRead(QTcpSocket *client);
 };
 
