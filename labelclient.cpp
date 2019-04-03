@@ -11,7 +11,13 @@ labelClient::labelClient(QObject *parent) : QObject(parent)
 
 void labelClient::sendData(){
     tcpSocket->abort();
-    tcpSocket->connectToHost("leach.site1", 9754);
+    tcpSocket->connectToHost("localhost", 9754);
+
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_12);
+    out << "Test data";
+    tcpSocket->write(data);
 }
 
 void labelClient::connectError(QAbstractSocket::SocketError error){
