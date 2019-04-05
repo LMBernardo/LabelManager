@@ -22,7 +22,7 @@ signals:
 
 public slots:
     void clientConnected();
-    void clientReadyRead(QTcpSocket *client);
+    void clientReadyRead();
 };
 
 #endif // LABELSERVER_H

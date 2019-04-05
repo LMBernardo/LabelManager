@@ -18,12 +18,7 @@ public:
     explicit SettingsWindow(QWidget *parent = nullptr);
     ~SettingsWindow();
 
-    void initSettings();
-
-    QString lpnPrefix(QString prefix, int padding, int lpn);
-    int getLPN(QString prefix = "");
-    QString getFullLPN(QString prefix = "");
-
+    void initSettingsWindow();
 
 private slots:
     void on_submitted(QString);

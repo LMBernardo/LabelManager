@@ -52,11 +52,6 @@ private slots:
 
 private:
     Ui::MainUI *ui;
-    QFileSystemWatcher settingsWatcher;
-
-    int getLPN(QString prefix = "");
-    QString getFullLPN(QString prefix = "");
-    QString lpnPrefix(QString prefix, int padding, int lpn);
     int printLabel(QString command = "", QString label = "");
 };
 

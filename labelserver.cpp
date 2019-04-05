@@ -28,16 +28,17 @@ void labelServer::clientConnected(){
     qInfo() << "New client connected.";
     QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
     connect(clientConnection, SIGNAL(disconnected()), clientConnection, SLOT(deleteLater()));
-    connect(clientConnection, SIGNAL(readyRead()), this, SLOT(clientReadyRead(clientConnection)));
+    connect(clientConnection, SIGNAL(readyRead()), this, SLOT(clientReadyRead()));
 }
 
-void labelServer::clientReadyRead(QTcpSocket *client){
+void labelServer::clientReadyRead(){
 
+    QTcpSocket *client = static_cast<QTcpSocket*>(QObject::sender());
     qInfo() << client->readAll();
 
-    QByteArray reply;
-    QDataStream out(&reply, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_5_12);
-    out << "Success";
-    client->write(reply);
+//    QByteArray reply;
+//    QDataStream out(&reply, QIODevice::WriteOnly);
+//    out.setVersion(QDataStream::Qt_5_12);
+//    out << "Success";
+    client->write("Success!");
 }

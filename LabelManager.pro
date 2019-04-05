@@ -30,7 +30,8 @@ SOURCES += \
     settingswindow.cpp \
     getstringdialog.cpp \
     labelserver.cpp \
-    labelclient.cpp
+    labelclient.cpp \
+    utils.cpp
 
 HEADERS += \
         mainwindow.h \
