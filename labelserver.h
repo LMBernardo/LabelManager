@@ -13,7 +13,7 @@ class labelServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit labelServer(QObject *parent = nullptr);
+    explicit labelServer(QObject *parent = nullptr, unsigned short port = 9547);
 
 private:
     QTcpServer *tcpServer = nullptr;

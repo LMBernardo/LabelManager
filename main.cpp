@@ -17,11 +17,6 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationDomain("retnuh.us");
     QApplication::setApplicationName("LabelManager");
 
-    labelServer ls;
-    labelClient lc;
-
-    lc.sendData("Test Data");
-
     MainWindow w;
     w.updateUi();
 

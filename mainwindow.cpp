@@ -22,6 +22,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lpnStatus->setVisible(false);
     ui->skuStatus->setVisible(false);
     utils::initSettings(this);
+
+    lClient = new labelClient(this);
+
+    QSettings settings;
+    lServer = new labelServer(this, static_cast<unsigned short>(settings.value("MainSettings/listenPort").toInt()));
 }
 
 MainWindow::~MainWindow()

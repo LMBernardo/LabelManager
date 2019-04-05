@@ -41,7 +41,7 @@ private slots:
 
     void on_lpnSpinBox_valueChanged(int value);
 
-    void on_remoteModeCheckbox_stateChanged(int arg1);
+    //void on_remoteModeCheckbox_stateChanged(int arg1);
 
     void on_lpnSetButton_released();
 

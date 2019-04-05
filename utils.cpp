@@ -64,6 +64,11 @@ void utils::initSettings(QObject *caller){
             qInfo() << "Config error! Using print server: localhost";
         }
 
+        if ( !settings.contains("listenPort") ) {
+            settings.setValue("listenPort", 9457);
+            qInfo() << "Config error! Using listen port: 9457";
+        }
+
         if ( !settings.contains("printerName") ) {
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             qInfo() << "Config error! Using printer name: Zebra_Technologies_ZTC_ZP_500_";

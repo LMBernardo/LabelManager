@@ -59,7 +59,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="labelSettingsTab">
       <property name="maximumSize">
@@ -503,7 +503,17 @@
        <item row="1" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="listenPortLineEdit"/>
+          <widget class="QSpinBox" name="listenPortSpinbox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximum">
+            <number>65535</number>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QCheckBox" name="skuServerCheckbox">

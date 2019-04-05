@@ -83,6 +83,7 @@ void SettingsWindow::readSettings(){
     //ui->skuServerLineEdit->setText( settings.value("skuServerAddress").toString() );
     ui->skuServerCheckbox->setChecked( settings.value("skuServer").toBool() );
     ui->printServerLineEdit->setText( settings.value("printServer").toString() );
+    ui->listenPortSpinbox->setValue( settings.value("listenPort").toInt() );
     ui->printerNameLineEdit->setText(settings.value("printerName").toString() );
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
     ui->printCommandCheckbox->setChecked( settings.value("usePrintCommand").toBool() );
@@ -145,6 +146,7 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
             settings.setValue("skuServer", false);
             settings.setValue("printServer", "localhost");
+            settings.setValue("listenPort", 9457);
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             settings.setValue("usePrintCommand", true);
@@ -227,18 +229,18 @@ void SettingsWindow::on_lpnSpinBox_valueChanged(int value)
     ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value));
 }
 
-void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)
-{
-    if (remoteMode){
-        ui->remoteLineEdit->setEnabled(true);
-        ui->remoteSyncButton->setEnabled(true);
-        ui->lpnFetchButton->setEnabled(true);
-    } else {
-        ui->remoteLineEdit->setEnabled(false);
-        ui->remoteSyncButton->setEnabled(false);
-        ui->lpnFetchButton->setEnabled(false);
-    }
-}
+//void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)
+//{
+//    if (remoteMode){
+//        ui->remoteLineEdit->setEnabled(true);
+//        ui->remoteSyncButton->setEnabled(true);
+//        ui->lpnFetchButton->setEnabled(true);
+//    } else {
+//        ui->remoteLineEdit->setEnabled(false);
+//        ui->remoteSyncButton->setEnabled(false);
+//        ui->lpnFetchButton->setEnabled(false);
+//    }
+//}
 
 void SettingsWindow::on_lpnSetButton_released()
 {

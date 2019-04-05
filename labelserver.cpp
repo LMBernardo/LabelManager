@@ -1,11 +1,10 @@
 #include "labelserver.h"
 
-labelServer::labelServer(QObject *parent) : QObject(parent)
+labelServer::labelServer(QObject *parent, unsigned short port) : QObject(parent)
 {
     tcpServer = new QTcpServer(this);
-    if (!tcpServer->listen(QHostAddress::Any, 9754)) {
-        QString netError = "Failed to listen on port!" + tcpServer->errorString();
-        qCritical() << netError;
+    if (!tcpServer->listen(QHostAddress::Any, port)) {
+        qCritical() << "Failed to listen on port" << port << ":" << tcpServer->errorString();
         tcpServer->close();
         return;
     }

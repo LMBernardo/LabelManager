@@ -5,6 +5,9 @@
 #include <QMainWindow>
 #include <QSettings>
 
+#include "labelserver.h"
+#include "labelclient.h"
+
 namespace Ui{
 class MainUI;
 }
@@ -52,6 +55,8 @@ private slots:
 
 private:
     Ui::MainUI *ui;
+    labelServer* lServer;
+    labelClient* lClient;
     int printLabel(QString command = "", QString label = "");
 };
 
