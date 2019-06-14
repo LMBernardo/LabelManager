@@ -18,12 +18,7 @@ public:
     explicit SettingsWindow(QWidget *parent = nullptr);
     ~SettingsWindow();
 
-    void initSettings();
-
-    QString lpnPrefix(QString prefix, int padding, int lpn);
-    int getLPN(QString prefix = "");
-    QString getFullLPN(QString prefix = "");
-
+    void initSettingsWindow();
 
 private slots:
     void on_submitted(QString);
@@ -46,7 +41,7 @@ private slots:
 
     void on_lpnSpinBox_valueChanged(int value);
 
-    void on_remoteModeCheckbox_stateChanged(int arg1);
+    //void on_remoteModeCheckbox_stateChanged(int arg1);
 
     void on_lpnSetButton_released();
 

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QAbstractSocket>
 #include <QDataStream>
 
 class labelClient : public QObject
@@ -10,12 +11,11 @@ class labelClient : public QObject
     Q_OBJECT
 public:
     explicit labelClient(QObject *parent = nullptr);
+    void sendData(std::string data);
 
 private:
-    QTcpSocket *tcpSocket;
-    QDataStream in;
-
-    void sendData();
+    QTcpSocket *tcpSocket = nullptr;
+    QDataStream *in = nullptr;
 
 signals:
 

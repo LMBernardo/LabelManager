@@ -1,6 +1,7 @@
 #include "getstringdialog.h"
 #include "settingswindow.h"
 #include "ui_settingswindow.h"
+#include "utils.h"
 
 #include <QCoreApplication>
 #include <QSettings>
@@ -14,11 +15,6 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Not yet implemented
-    ui->skuServerLabel->setVisible(false);
-    ui->skuServerLineEdit->setVisible(false);
-    ui->skuServerLineEdit->setVisible(false);
-
     ui->remoteLabel->setVisible(false);
     ui->remoteLineEdit->setVisible(false);
     ui->remoteSyncButton->setVisible(false);
@@ -30,17 +26,12 @@ SettingsWindow::~SettingsWindow()
     delete ui;
 }
 
-void SettingsWindow::initSettings(){
+void SettingsWindow::initSettingsWindow(){
     readSettings();
     init = true;
 
     // Select proper tab
     ui->tabWidget->setCurrentIndex(0);
-
-    // Hide unused skuServer functionality
-    ui->skuServerLabel->setHidden(true);
-    ui->skuServerCheckbox->setHidden(true);
-    ui->skuServerLineEdit->setHidden(true);
 
     // Only accept numbers and letters in printer name
     //ui->printerNameLineEdit->setValidator( new QRegExpValidator(QRegExp("[0-9][a-zA-Z]")) );
@@ -57,7 +48,7 @@ void SettingsWindow::saveSettings(){
     settings.beginGroup("MainSettings");
 
     settings.setValue("serverAddress", ui->remoteLineEdit->text());
-    settings.setValue("skuServerAddress", ui->skuServerLineEdit->text());
+    //settings.setValue("skuServerAddress", ui->skuServerLineEdit->text());
     settings.setValue("skuServer", ui->skuServerCheckbox->isChecked());
     settings.setValue("printServer", ui->printServerLineEdit->text());
     settings.setValue("printerName", ui->printerNameLineEdit->text());
@@ -65,7 +56,7 @@ void SettingsWindow::saveSettings(){
     settings.setValue("usePrintCommand", ui->printCommandCheckbox->isChecked());
     QVariantMap lpnMap;
     for (int i = 0; i < ui->prefixComboBox->count(); i++){
-        lpnMap.insert(ui->prefixComboBox->itemText(i), getLPN(ui->prefixComboBox->itemText(i)));
+        lpnMap.insert(ui->prefixComboBox->itemText(i), utils::getLPN(ui->prefixComboBox->itemText(i)));
     }
     settings.setValue("lpnMap", lpnMap);
     settings.setValue("lpnPadding", ui->paddingSpinBox->value());
@@ -90,9 +81,10 @@ void SettingsWindow::readSettings(){
     settings.beginGroup("MainSettings");
 
     ui->remoteLineEdit->setText( settings.value("serverAddress").toString() );
-    ui->skuServerLineEdit->setText( settings.value("skuServerAddress").toString() );
+    //ui->skuServerLineEdit->setText( settings.value("skuServerAddress").toString() );
     ui->skuServerCheckbox->setChecked( settings.value("skuServer").toBool() );
     ui->printServerLineEdit->setText( settings.value("printServer").toString() );
+    ui->listenPortSpinbox->setValue( settings.value("listenPort").toInt() );
     ui->printerNameLineEdit->setText(settings.value("printerName").toString() );
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
     ui->printCommandCheckbox->setChecked( settings.value("usePrintCommand").toBool() );
@@ -127,38 +119,7 @@ void SettingsWindow::readSettings(){
         ui->lpnFetchButton->setEnabled(false);
     }
 
-    if (ui->skuServerCheckbox->isChecked()){
-        ui->skuServerLineEdit->setEnabled(true);
-    } else {
-        ui->skuServerLineEdit->setEnabled(false);
-    }
-
-     ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
-}
-
-QString SettingsWindow::lpnPrefix(QString prefix, int padding, int lpn){
-    int digits = 0; do { lpn /= 10; digits++; } while (lpn != 0);
-    for (int i = 0; i < padding - digits; i++){
-        prefix.append("0");
-    }
-    return prefix;
-}
-
-
-int SettingsWindow::getLPN(QString prefix){
-    QSettings settings;
-    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
-    int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
-    return lpn;
-}
-
-QString SettingsWindow::getFullLPN(QString prefix){
-    QSettings settings;
-    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
-    int currentLPN = getLPN(prefix);
-    QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
-    lpnString.append(QString::number(currentLPN));
-    return lpnString;
+     ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
 
 void SettingsWindow::on_settingsDialogButtons_accepted()
@@ -187,6 +148,7 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
             settings.setValue("skuServer", false);
             settings.setValue("printServer", "localhost");
+            settings.setValue("listenPort", 9457);
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             settings.setValue("usePrintCommand", true);
@@ -248,7 +210,7 @@ void SettingsWindow::on_submitted(QString prefix){
 void SettingsWindow::on_paddingSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value()));
+    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value()));
 }
 
 void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
@@ -259,28 +221,28 @@ void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
     settings.setValue("MainSettings/currentPrefix", text);
     settings.sync();
 
-    ui->lpnSpinBox->setValue(getLPN(text));
-    ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+    ui->lpnSpinBox->setValue(utils::getLPN(text));
+    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
 }
 
 void SettingsWindow::on_lpnSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    ui->lpnSpinBox->setPrefix(lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value));
+    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value));
 }
 
-void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)
-{
-    if (remoteMode){
-        ui->remoteLineEdit->setEnabled(true);
-        ui->remoteSyncButton->setEnabled(true);
-        ui->lpnFetchButton->setEnabled(true);
-    } else {
-        ui->remoteLineEdit->setEnabled(false);
-        ui->remoteSyncButton->setEnabled(false);
-        ui->lpnFetchButton->setEnabled(false);
-    }
-}
+//void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)
+//{
+//    if (remoteMode){
+//        ui->remoteLineEdit->setEnabled(true);
+//        ui->remoteSyncButton->setEnabled(true);
+//        ui->lpnFetchButton->setEnabled(true);
+//    } else {
+//        ui->remoteLineEdit->setEnabled(false);
+//        ui->remoteSyncButton->setEnabled(false);
+//        ui->lpnFetchButton->setEnabled(false);
+//    }
+//}
 
 void SettingsWindow::on_lpnSetButton_released()
 {
@@ -303,16 +265,17 @@ void SettingsWindow::on_lpnSetButton_released()
         break;
 
     default:
-        ui->lpnSpinBox->setValue(getLPN(ui->prefixComboBox->currentText()));
+        ui->lpnSpinBox->setValue(utils::getLPN(ui->prefixComboBox->currentText()));
         break;
     }
 }
 
 void SettingsWindow::on_skuServerCheckbox_stateChanged(int skuServer)
 {
-    if (skuServer) {
-        ui->skuServerLineEdit->setEnabled(true);
-    } else {
-        ui->skuServerLineEdit->setEnabled(false);
-    }
+    (void) skuServer;
+//    if (skuServer) {
+//        ui->skuServerLineEdit->setEnabled(true);
+//    } else {
+//        ui->skuServerLineEdit->setEnabled(false);
+//    }
 }

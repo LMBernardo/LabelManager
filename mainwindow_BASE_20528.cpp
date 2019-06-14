@@ -9,9 +9,6 @@
 #include <QClipboard>
 #include <QMessageBox>
 
-#include "utils.h"
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainUI)
@@ -21,12 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->lpnStatus->setVisible(false);
     ui->skuStatus->setVisible(false);
-    utils::initSettings(this);
-
-    lClient = new labelClient(this);
-
-    QSettings settings;
-    lServer = new labelServer(this, static_cast<unsigned short>(settings.value("MainSettings/listenPort").toInt()));
 }
 
 MainWindow::~MainWindow()
@@ -34,8 +25,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::initSettings(){
 
-<<<<<<< HEAD
     QSettings settings;
 
     settings.sync();
@@ -109,11 +100,6 @@ MainWindow::~MainWindow()
             qInfo() << "Config error! Using copy to clipboard: true";
         }
 
-        if ( !settings.contains("lpnBatchMode") ) {
-            settings.setValue("lpnBatchMode", false);
-            qInfo() << "Config error! Using LPN batch mode: false";
-        }
-
         qInfo() << "Configuration loaded.\n";
     } else {
         qInfo() << "Config not found, using default settings.";
@@ -132,7 +118,6 @@ MainWindow::~MainWindow()
         settings.setValue("remoteMode", false);
         settings.setValue("currentPrefix", "LPN_");
         settings.setValue("copyClipboard", true);
-        settings.setValue("lpnBatchMode", false);
     }
 
     settings.endGroup();
@@ -156,13 +141,11 @@ MainWindow::~MainWindow()
 
     //settings.sync();
 }
-=======
->>>>>>> 362a39b934475c804e2d519d7be5a0907e2c78bb
 
 void MainWindow::on_settingsChange(const QString sFile){
-    // Don't complain about not using sFile
-    (void) sFile;
     qInfo() << "Settings file changed, updating..";
+    // Watch file again in case file has been updated by being replaced
+    settingsWatcher.addPath(sFile);
     updateUi();
 }
 
@@ -185,7 +168,7 @@ void MainWindow::updateUi(){
         ui->skuLineEdit->setPlaceholderText("");
     }
 
-    QString lpnString = utils::getFullLPN(settings.value("currentPrefix").toString());
+    QString lpnString = getFullLPN(settings.value("currentPrefix").toString());
     ui->lpnLineEdit->setText(lpnString);
 
     settings.endGroup();
@@ -195,6 +178,34 @@ void MainWindow::updateUi(){
     ui->skuQuantitySpinBox->setValue( settings.value("printQuantity").toList().at(1).toInt() );
     ui->textQuantitySpinBox->setValue( settings.value("printQuantity").toList().at(2).toInt() );
     settings.endGroup();
+}
+
+int MainWindow::getLPN(QString prefix){
+    QSettings settings;
+    settings.sync();
+    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
+    //qInfo() << "Finding prefix:" << prefix;
+    int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
+    //qInfo() << "Returning LPN:" << QString("%1").arg(QString::number(lpn));
+    return lpn;
+}
+
+QString MainWindow::getFullLPN(QString prefix){
+    QSettings settings;
+    settings.sync();
+    if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
+    int currentLPN = getLPN(prefix);
+    QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
+    return lpnString;
+}
+
+QString MainWindow::lpnPrefix(QString prefix, int padding, int lpn){
+    int lpnInit = lpn;
+    int digits = 0; do { lpn /= 10; digits++; } while (lpn != 0);
+    for (int i = 0; i < padding - digits; i++){
+        prefix.append("0");
+    }
+    return prefix + QString::number(lpnInit);
 }
 
 int MainWindow::printLabel(QString command, QString label){
@@ -222,7 +233,7 @@ void MainWindow::on_actionSettings_triggered()
     SettingsWindow s;
     s.setFixedHeight(225);
     //s.setFixedWidth(415);
-    s.initSettingsWindow();
+    s.initSettings();
     s.exec();
     updateUi();
 
@@ -244,22 +255,10 @@ void MainWindow::on_printLPNButton_released()
     QSettings settings;
     QClipboard *clipboard = QApplication::clipboard();
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
-<<<<<<< HEAD
     QString lpnString = getFullLPN();
-    QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
-=======
-    QString lpnString = utils::getFullLPN(prefix);
->>>>>>> 362a39b934475c804e2d519d7be5a0907e2c78bb
     int status = 0;
     for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){
         status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
-        if (settings.value("MainSettings/lpnBatchMode").toBool() == true){
-            lpnMap.remove(prefix);
-            lpnMap.insert(prefix, getLPN(prefix)+1);
-            settings.setValue("MainSettings/lpnMap", lpnMap);
-            settings.sync();
-            updateUi();
-        }
         if ( status != 0 ) break;
     }
     qInfo() << "Status:" << QString("%1").arg(QString::number(status));
@@ -267,7 +266,7 @@ void MainWindow::on_printLPNButton_released()
         if (settings.value("MainSettings/copyClipboard").toBool()) clipboard->setText(lpnString);
         QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
         lpnMap.remove(prefix);
-        lpnMap.insert(prefix, utils::getLPN(prefix)+1);
+        lpnMap.insert(prefix, getLPN(prefix)+1);
         settings.setValue("MainSettings/lpnMap", lpnMap);
         //settings.sync();
         updateUi();
@@ -349,8 +348,8 @@ void MainWindow::on_reprintLPNButton_released()
 {
     QSettings settings;
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
-    int prevLPN = utils::getLPN(prefix)-1;
-    QString lpnString = utils::lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), prevLPN);
+    int prevLPN = getLPN(prefix)-1;
+    QString lpnString = lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), prevLPN);
     lpnString.append(QString::number(prevLPN));
     ui->reprintLPNButton->setEnabled(false);
     for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){

@@ -6,13 +6,14 @@
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QNetworkInterface>
+#include <QtNetwork/QHostAddress>
 #include <QMessageBox>
 
 class labelServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit labelServer(QObject *parent = nullptr);
+    explicit labelServer(QObject *parent = nullptr, unsigned short port = 9547);
 
 private:
     QTcpServer *tcpServer = nullptr;
@@ -21,8 +22,7 @@ signals:
 
 public slots:
     void clientConnected();
-    void statusReply();
-    void clientReadyRead(QTcpSocket *client);
+    void clientReadyRead();
 };
 
 #endif // LABELSERVER_H

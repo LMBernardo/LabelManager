@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "QDebug"
+#include "utils.h"
+
+#include "labelserver.h"
+#include "labelclient.h"
 
 // Uncomment to disable debug output (qInfo, qDebug, qWarning, qCritical. qFatal)
 //#define QT_NO_DEBUG_OUTPUT
@@ -9,12 +13,11 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QCoreApplication::setOrganizationName("retco");
-    QCoreApplication::setOrganizationDomain("retnuh.us");
-    QCoreApplication::setApplicationName("LabelManager");
+    QApplication::setOrganizationName("retco");
+    QApplication::setOrganizationDomain("retnuh.us");
+    QApplication::setApplicationName("LabelManager");
 
     MainWindow w;
-    w.initSettings();
     w.updateUi();
 
     w.show();
