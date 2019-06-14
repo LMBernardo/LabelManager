@@ -17,13 +17,14 @@ int utils::getLPN(QString prefix){
     return lpn;
 }
 
-QString utils::lpnPrefix(QString prefix, int padding, int lpn){
+QString utils::lpnPrefix(QString prefix, int padding, int lpn, bool prefixOnly){
     int lpnInit = lpn;
     int digits = 0; do { lpn /= 10; digits++; } while (lpn != 0);
     for (int i = 0; i < padding - digits; i++){
         prefix.append("0");
     }
-    return prefix + QString::number(lpnInit);
+    if (prefixOnly) return prefix;
+    else return prefix + QString::number(lpnInit);
 }
 
 QString utils::getFullLPN(QString prefix){

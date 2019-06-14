@@ -119,7 +119,7 @@ void SettingsWindow::readSettings(){
         ui->lpnFetchButton->setEnabled(false);
     }
 
-     ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+     ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
 }
 
 void SettingsWindow::on_settingsDialogButtons_accepted()
@@ -210,7 +210,7 @@ void SettingsWindow::on_submitted(QString prefix){
 void SettingsWindow::on_paddingSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value()));
+    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value(), true));
 }
 
 void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
@@ -222,13 +222,13 @@ void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
     settings.sync();
 
     ui->lpnSpinBox->setValue(utils::getLPN(text));
-    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value()));
+    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
 }
 
 void SettingsWindow::on_lpnSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value));
+    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value, true));
 }
 
 //void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)

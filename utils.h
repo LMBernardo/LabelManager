@@ -16,7 +16,7 @@ public:
     //explicit utils(QObject *parent = nullptr);
 
     static int getLPN(QString prefix);
-    static QString lpnPrefix(QString prefix, int padding, int lpn);
+    static QString lpnPrefix(QString prefix, int padding, int lpn, bool prefixOnly = false);
     static QString getFullLPN(QString prefix);
     static void initSettings(QObject *caller);
 
