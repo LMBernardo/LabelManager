@@ -100,6 +100,11 @@ void MainWindow::initSettings(){
             qInfo() << "Config error! Using copy to clipboard: true";
         }
 
+        if ( !settings.contains("lpnBatchMode") ) {
+            settings.setValue("lpnBatchMode", false);
+            qInfo() << "Config error! Using LPN batch mode: false";
+        }
+
         qInfo() << "Configuration loaded.\n";
     } else {
         qInfo() << "Config not found, using default settings.";
@@ -118,6 +123,7 @@ void MainWindow::initSettings(){
         settings.setValue("remoteMode", false);
         settings.setValue("currentPrefix", "LPN_");
         settings.setValue("copyClipboard", true);
+        settings.setValue("lpnBatchMode", false);
     }
 
     settings.endGroup();
@@ -256,9 +262,17 @@ void MainWindow::on_printLPNButton_released()
     QClipboard *clipboard = QApplication::clipboard();
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
     QString lpnString = getFullLPN();
+    QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
     int status = 0;
     for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){
         status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
+        if (settings.value("MainSettings/lpnBatchMode").toBool() == true){
+            lpnMap.remove(prefix);
+            lpnMap.insert(prefix, getLPN(prefix)+1);
+            settings.setValue("MainSettings/lpnMap", lpnMap);
+            settings.sync();
+            updateUi();
+        }
         if ( status != 0 ) break;
     }
     qInfo() << "Status:" << QString("%1").arg(QString::number(status));

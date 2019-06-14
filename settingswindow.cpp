@@ -73,6 +73,7 @@ void SettingsWindow::saveSettings(){
     settings.setValue("remoteMode", ui->remoteCheckbox->isChecked());
     settings.setValue("currentPrefix", ui->prefixComboBox->currentText());
     settings.setValue("copyClipboard", ui->copyCheckbox->isChecked());
+    settings.setValue("lpnBatchMode", ui->lpnBatchModeCheckbox->isChecked());
 
     settings.endGroup();
 
@@ -95,6 +96,7 @@ void SettingsWindow::readSettings(){
     ui->printerNameLineEdit->setText(settings.value("printerName").toString() );
     ui->printCommandLineEdit->setText ( settings.value("printCommand").toString() );
     ui->printCommandCheckbox->setChecked( settings.value("usePrintCommand").toBool() );
+    ui->lpnBatchModeCheckbox->setChecked( settings.value("lpnBatchMode").toBool());
 
 
     QStringList prefixList;
