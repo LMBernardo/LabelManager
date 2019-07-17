@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     QSettings settings;
     lServer = new labelServer(this, static_cast<unsigned short>(settings.value("MainSettings/listenPort").toInt()));
+
+    wsServer = new webSocket(9458, this);
+    connect(wsServer, &webSocket::wsMessageReceived, this, &MainWindow::on_wsMessageReceived);
 }
 
 MainWindow::~MainWindow()
@@ -232,6 +235,14 @@ void MainWindow::on_reprintLPNButton_released()
         printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
     }
     ui->reprintLPNButton->setEnabled(true);
+}
+
+void MainWindow::on_wsMessageReceived(const QString message){
+    ui->textLineEdit->setText(message);
+    ui->printTextButton->setEnabled(false);
+    QSettings settings;
+    printLabel(settings.value("MainSettings/printCommand").toString(), ui->textLineEdit->text());
+    ui->printTextButton->setEnabled(true);
 }
 
 

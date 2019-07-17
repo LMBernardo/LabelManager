@@ -8,6 +8,8 @@
 #include "labelserver.h"
 #include "labelclient.h"
 
+#include "websocket.h"
+
 namespace Ui{
 class MainUI;
 }
@@ -53,10 +55,13 @@ private slots:
 
     void on_textLineEdit_returnPressed();
 
+    void on_wsMessageReceived(const QString arg1);
+
 private:
     Ui::MainUI *ui;
     labelServer* lServer;
     labelClient* lClient;
+    webSocket* wsServer;
     int printLabel(QString command = "", QString label = "");
 };
 

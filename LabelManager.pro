@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network websockets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,7 +31,8 @@ SOURCES += \
     getstringdialog.cpp \
     labelserver.cpp \
     labelclient.cpp \
-    utils.cpp
+    utils.cpp \
+    websocket.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     getstringdialog.h \
     labelserver.h \
     labelclient.h \
-    utils.h
+    utils.h \
+    websocket.h
 
 # Default rules for deployment.
  qnx: target.path = /tmp/$${TARGET}/bin
