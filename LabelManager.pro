@@ -52,7 +52,17 @@ else: unix:!android: target.path = /usr/bin
 desktop.path = ~/.local/share/applications/
 desktop.files = ./LabelManager.desktop
 
-INSTALLS += desktop
+# print_label.sh
+unix: print_script.path = /usr/bin/
+unix: print_script.files = ./print_label.sh
+
+# Set execute permissions on print_label script
+unix: print_script_post.path = ./
+unix: print_script_post.commands += chmod +x $(INSTALL_ROOT)/usr/bin/print_label.sh;
+
+QMAKE_EXTRA_TARGETS += print_script_post
+
+INSTALLS += desktop print_script print_script_post
 
 RESOURCES += \
     resources.qrc
@@ -61,3 +71,6 @@ FORMS += \
     mainwindow.ui \
     settingswindow.ui \
     getstringdialog.ui
+
+DISTFILES += \
+    print_label.sh
