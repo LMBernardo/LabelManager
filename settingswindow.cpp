@@ -54,6 +54,12 @@ void SettingsWindow::saveSettings(){
     settings.setValue("printerName", ui->printerNameLineEdit->text());
     settings.setValue("printCommand", ui->printCommandLineEdit->text());
     settings.setValue("usePrintCommand", ui->printCommandCheckbox->isChecked());
+
+    settings.setValue("startMinimized", ui->startMinimizedCheckbox->isChecked());
+    settings.setValue("enableSystemTrayIcon", ui->enableSysTrayCheckbox->isChecked());
+    settings.setValue("minimizeToSystemTray", ui->minimizeToSysTrayCheckbox->isChecked());
+    settings.setValue("systemTrayNotifications", ui->sysTrayNotificationsCheckbox->isChecked());
+
     QVariantMap lpnMap;
     for (int i = 0; i < ui->prefixComboBox->count(); i++){
         lpnMap.insert(ui->prefixComboBox->itemText(i), utils::getLPN(ui->prefixComboBox->itemText(i)));
@@ -90,6 +96,11 @@ void SettingsWindow::readSettings(){
     ui->printCommandCheckbox->setChecked( settings.value("usePrintCommand").toBool() );
     ui->lpnBatchModeCheckbox->setChecked( settings.value("lpnBatchMode").toBool());
 
+    ui->startMinimizedCheckbox->setChecked( settings.value("startMinimized").toBool());
+    ui->enableSysTrayCheckbox->setChecked( settings.value("enableSystemTrayIcon").toBool());
+    ui->minimizeToSysTrayCheckbox->setChecked( settings.value("minimizeToSystemTray").toBool());
+    ui->sysTrayNotificationsCheckbox->setChecked( settings.value("systemTrayNotifications").toBool());
+
 
     QStringList prefixList;
     QVariantMap lpnMap = settings.value("lpnMap").toMap();
@@ -104,7 +115,14 @@ void SettingsWindow::readSettings(){
     ui->paddingSpinBox->setValue( settings.value("lpnPadding").toInt() );
     ui->salvageLineEdit->setText( settings.value("salvageLabel").toString() );
     ui->remoteCheckbox->setChecked( settings.value("remoteMode").toBool() );
-    ui->lpnSpinBox->setValue( lpnMap.find(currentPrefix).value().toInt() );
+    auto lpnPrefixMap = lpnMap.find(currentPrefix);
+    if (lpnPrefixMap == lpnMap.end()) {
+        qDebug() << "Error: could not find prefix \"" << currentPrefix << "\" in lpnMap!";
+        qDebug() << "Using 0";
+        ui->lpnSpinBox->setValue(0);
+    } else {
+        ui->lpnSpinBox->setValue( lpnMap.find(currentPrefix).value().toInt() );
+    }
     ui->copyCheckbox->setChecked( settings.value("copyClipboard").toBool() );
 
     settings.endGroup();
@@ -117,6 +135,14 @@ void SettingsWindow::readSettings(){
         ui->remoteLineEdit->setEnabled(false);
         ui->remoteSyncButton->setEnabled(false);
         ui->lpnFetchButton->setEnabled(false);
+    }
+
+    if (ui->enableSysTrayCheckbox->isChecked()){
+        ui->minimizeToSysTrayCheckbox->setEnabled(true);
+        ui->sysTrayNotificationsCheckbox->setEnabled(true);
+    } else {
+        ui->minimizeToSysTrayCheckbox->setEnabled(false);
+        ui->sysTrayNotificationsCheckbox->setEnabled(false);
     }
 
      ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
@@ -152,6 +178,11 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             settings.setValue("usePrintCommand", true);
+        } else if (ui->tabWidget->currentIndex() == 2) {
+            settings.setValue("startMinimized", true);
+            settings.setValue("enableSystemTrayIcon", true);
+            settings.setValue("minimizeToSystemTray", true);
+            settings.setValue("systemTrayNotifications", true);
         } else {
             //lpnMap.insert("LPN_", 1);
             //settings.setValue("lpnMap", lpnMap);
@@ -183,10 +214,14 @@ void SettingsWindow::on_deletePrefixButton_released()
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
     QSettings settings;
+    auto lpnMap = settings.value("MainSettings/lpnMap").toMap();
     switch(msgBox.exec()){
 
     case QMessageBox::Yes:
+        lpnMap.remove(ui->prefixComboBox->currentText());
+        settings.setValue("MainSettings/lpnMap", lpnMap);
         settings.setValue("MainSettings/currentPrefix", "");
+        settings.sync();
         ui->prefixComboBox->removeItem(ui->prefixComboBox->currentIndex());
         break;
 
@@ -204,6 +239,11 @@ void SettingsWindow::on_addPrefixButton_released()
 
 void SettingsWindow::on_submitted(QString prefix){
     if (ui->prefixComboBox->findText(prefix) == -1) ui->prefixComboBox->addItem(prefix);
+    QSettings settings;
+    QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
+    lpnMap.insert(prefix, 0);
+    settings.setValue("MainSettings/lpnMap", lpnMap);
+    settings.sync();
     ui->prefixComboBox->setCurrentIndex(ui->prefixComboBox->findText(prefix));
 }
 
@@ -278,4 +318,15 @@ void SettingsWindow::on_skuServerCheckbox_stateChanged(int skuServer)
 //    } else {
 //        ui->skuServerLineEdit->setEnabled(false);
 //    }
+}
+
+void SettingsWindow::on_enableSysTrayCheckbox_stateChanged(int checked)
+{
+    if (checked == Qt::Checked){
+        ui->minimizeToSysTrayCheckbox->setEnabled(true);
+        ui->sysTrayNotificationsCheckbox->setEnabled(true);
+    } else {
+        ui->minimizeToSysTrayCheckbox->setEnabled(false);
+        ui->sysTrayNotificationsCheckbox->setEnabled(false);
+    }
 }

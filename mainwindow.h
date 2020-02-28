@@ -4,6 +4,14 @@
 #include <QFileSystemWatcher>
 #include <QMainWindow>
 #include <QSettings>
+#include <QCoreApplication>
+#include <QSettings>
+#include <QDebug>
+#include <QProcess>
+#include <QClipboard>
+#include <QMessageBox>
+#include <QSystemTrayIcon>
+#include <QCloseEvent>
 
 #include "labelserver.h"
 #include "labelclient.h"
@@ -22,10 +30,20 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void init();
     void initSettings();
     void updateUi();
 
+    // Overload closeEvent in order to show confirmation dialog
+    void closeEvent(QCloseEvent* event);
+    // Overload changeEvent to minimize to system tray
+    void changeEvent(QEvent* event);
+
 private slots:
+
+    void on_contextMenuExit();
+
+    void on_sysTrayActivated(QSystemTrayIcon::ActivationReason reason);
 
     void on_settingsChange(const QString sFile);
 
@@ -59,9 +77,12 @@ private slots:
 
 private:
     Ui::MainUI *ui;
+    QIcon* icon;
     labelServer* lServer;
     labelClient* lClient;
     webSocket* wsServer;
+    QSystemTrayIcon* sysTray;
+    QMenu* sysTrayMenu;
     int printLabel(QString command = "", QString label = "");
 };
 

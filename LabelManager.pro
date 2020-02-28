@@ -51,6 +51,7 @@ else: unix:!android: target.path = /usr/bin
 # .desktop file
 desktop.path = ~/.local/share/applications/
 desktop.files = ./LabelManager.desktop
+
 INSTALLS += desktop
 
 RESOURCES += \

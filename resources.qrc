@@ -2,11 +2,10 @@
     <qresource prefix="/">
         <file>res/check.png</file>
         <file>res/cross.png</file>
-        <file>icons/icon16.png</file>
-        <file>icons/icon32.png</file>
-        <file>icons/icon48.png</file>
-        <file>icons/icon64.png</file>
-        <file>icons/icon128.png</file>
-        <file>icons/ATTRIBUTION</file>
+        <file>icons/icon-16.png</file>
+        <file>icons/icon-32.png</file>
+        <file>icons/icon-48.png</file>
+        <file>icons/icon-64.png</file>
+        <file>icons/icon-128.png</file>
     </qresource>
 </RCC>

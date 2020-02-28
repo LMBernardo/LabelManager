@@ -2,13 +2,6 @@
 #include "ui_mainwindow.h"
 #include "settingswindow.h"
 
-#include <QCoreApplication>
-#include <QSettings>
-#include <QDebug>
-#include <QProcess>
-#include <QClipboard>
-#include <QMessageBox>
-
 #include "utils.h"
 
 
@@ -18,18 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-
-    ui->lpnStatus->setVisible(false);
-    ui->skuStatus->setVisible(false);
-    utils::initSettings(this);
-
-    lClient = new labelClient(this);
-
-    QSettings settings;
-    lServer = new labelServer(this, static_cast<unsigned short>(settings.value("MainSettings/listenPort").toInt()));
-
-    wsServer = new webSocket(9458, this);
-    connect(wsServer, &webSocket::wsMessageReceived, this, &MainWindow::on_wsMessageReceived);
 }
 
 MainWindow::~MainWindow()
@@ -37,6 +18,47 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::init(){
+
+    QSettings settings;
+
+    icon = new QIcon();
+    foreach( const QString &imageName, QDir(":/icons").entryList()){
+        int width = imageName.split("-")[1].split(".")[0].toInt();
+        QSize size = {width, width};
+        icon->addFile(":/icons/" + imageName, size);
+    }
+
+    this->setWindowIcon(icon->pixmap({32,32}));
+
+    sysTray = new QSystemTrayIcon;
+    sysTray->setIcon(icon->pixmap({32,32}));
+
+    if (QSysInfo::productType() != "osx"){
+        sysTrayMenu = new QMenu(this);
+        sysTrayMenu->addAction("Exit", this, &MainWindow::on_contextMenuExit);
+        sysTray->setContextMenu(sysTrayMenu);
+    }
+    QObject::connect(sysTray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(on_sysTrayActivated(QSystemTrayIcon::ActivationReason)));
+
+    if (settings.value("MainSettings/enableSystemTrayIcon").toBool()) sysTray->show();
+    else sysTray->hide();
+
+    ui->lpnStatus->setVisible(false);
+    ui->skuStatus->setVisible(false);
+    utils::initSettings(this);
+
+    lClient = new labelClient(this);
+
+
+    lServer = new labelServer(this, static_cast<unsigned short>(settings.value("MainSettings/listenPort").toInt()));
+
+    wsServer = new webSocket(9458, this);
+    connect(wsServer, &webSocket::wsMessageReceived, this, &MainWindow::on_wsMessageReceived);
+
+    if (settings.value("MainSettings/startMinimized").toBool()) this->showMinimized();
+
+}
 
 void MainWindow::on_settingsChange(const QString sFile){
     // Don't complain about not using sFile
@@ -52,6 +74,9 @@ void MainWindow::updateUi(){
     settings.sync();
 
     settings.beginGroup("MainSettings");
+
+    if (settings.value("enableSystemTrayIcon").toBool()) sysTray->show();
+    else sysTray->hide();
 
     if (settings.value("remoteMode").toBool() ){
         //ui->fetchLPNButton->setEnabled(true);
@@ -76,23 +101,65 @@ void MainWindow::updateUi(){
     settings.endGroup();
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    event->ignore();
+    if (QMessageBox::question(this, "Exit Confirmation", "Are you sure you want to exit?") == QMessageBox::Yes){
+        event->accept();
+    }
+}
+
+void MainWindow::changeEvent(QEvent *event)
+{
+    QSettings settings;
+    if (settings.value("MainSettings/enableSystemTrayIcon").toBool() && settings.value("MainSettings/minimizeToSystemTray").toBool()){
+        if (event->type() == QEvent::WindowStateChange){
+            QWindowStateChangeEvent* e = static_cast<QWindowStateChangeEvent*>(event);
+            if (e->oldState() != Qt::WindowMinimized && isMinimized()){
+                QTimer::singleShot(0, this, SLOT(hide()));
+                event->ignore();
+                return;
+            }
+        }
+    }
+    QMainWindow::changeEvent(event);
+}
+
+void MainWindow::on_contextMenuExit()
+{
+    this->close();
+}
+
+void MainWindow::on_sysTrayActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    if (QSysInfo::productType() == "osx"){
+        if (this->isVisible()) this->hide();
+        else this->showNormal();
+    } else if (reason == QSystemTrayIcon::DoubleClick){
+        if (this->isVisible()) this->hide();
+        else this->showNormal();
+    }
+}
+
 int MainWindow::printLabel(QString command, QString label){
     QSettings settings;
     if (settings.value("MainSettings/usePrintCommand").toBool() == false) {
         return -9;
     } else {
-    QStringList commandList = command.split(" ");
-    QString program = commandList.at(0);
-    QStringList arguments;
-    for (int i = 1; i < commandList.size(); i++){
-        if (commandList.at(i) == "$PRINTER_NAME") arguments.push_back(settings.value("MainSettings/printerName").toString());
-        //else if (commandList.at(i) == "$FULL_LPN") arguments.push_back(ui->lpnLineEdit->text());
-        else arguments.push_back(commandList.at(i));
-    }
-    arguments.push_back(label);
-    qInfo() << "Command: " << program << arguments;
-    QProcess *printProcess = new QProcess(this);
-    return printProcess->execute(program, arguments);
+        QStringList commandList = command.split(" ");
+        QString program = commandList.at(0);
+        QStringList arguments;
+        for (int i = 1; i < commandList.size(); i++){
+            if (commandList.at(i) == "$PRINTER_NAME") arguments.push_back(settings.value("MainSettings/printerName").toString());
+            //else if (commandList.at(i) == "$FULL_LPN") arguments.push_back(ui->lpnLineEdit->text());
+            else arguments.push_back(commandList.at(i));
+        }
+        arguments.push_back(label);
+        qInfo() << "Command: " << program << arguments;
+        QProcess *printProcess = new QProcess(this);
+        if (settings.value("MainSettings/systemTrayNotifications").toBool() && settings.value("MainSettings/enableSystemTrayIcon").toBool())
+            sysTray->showMessage("Printing...", "Printing \"" + label + "\"", QSystemTrayIcon::Information, 3000);
+        return printProcess->execute(program, arguments);
     }
 }
 
@@ -109,7 +176,7 @@ void MainWindow::on_actionSettings_triggered()
 
 void MainWindow::on_actionExit_triggered()
 {
-    QApplication::quit();
+    this->close();
 }
 
 //void MainWindow::on_lpnLineEdit_returnPressed()
@@ -142,9 +209,9 @@ void MainWindow::on_printLPNButton_released()
         QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
         lpnMap.remove(prefix);
         if (settings.value("MainSettings/lpnBatchMode").toBool() == true){
-        lpnMap.insert(prefix, currentLPN);
+            lpnMap.insert(prefix, currentLPN);
         } else {
-        lpnMap.insert(prefix, ++currentLPN);
+            lpnMap.insert(prefix, ++currentLPN);
         }
         settings.setValue("MainSettings/lpnMap", lpnMap);
         //settings.sync();

@@ -47,6 +47,8 @@ private slots:
 
     void on_skuServerCheckbox_stateChanged(int arg1);
 
+    void on_enableSysTrayCheckbox_stateChanged(int checked);
+
 private:
     Ui::SettingsUI *ui;
 

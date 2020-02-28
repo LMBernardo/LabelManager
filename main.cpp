@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("LabelManager");
 
     MainWindow w;
+    w.init();
     w.updateUi();
 
     w.show();

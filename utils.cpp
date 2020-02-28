@@ -11,8 +11,17 @@ int utils::getLPN(QString prefix){
     QSettings settings;
     settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
-    //qInfo() << "Finding prefix:" << prefix;
-    int lpn = settings.value("MainSettings/lpnMap").toMap().find(prefix).value().toInt();
+    qInfo() << "Finding prefix:" << prefix;
+    auto lpnMap = settings.value("MainSettings/lpnMap").toMap();
+    auto lpnPrefixMap = lpnMap.find(prefix);
+    int lpn;
+    if (lpnPrefixMap != lpnMap.end() ){
+        lpn = lpnPrefixMap.value().toInt();
+    } else {
+        qDebug() << "Error: Could not find prefix \"" << prefix << "\" in lpnMap!";
+        qDebug() << "Using 0";
+        lpn = 0;
+    }
     //qInfo() << "Returning LPN:" << QString("%1").arg(QString::number(lpn));
     return lpn;
 }
@@ -116,6 +125,26 @@ void utils::initSettings(QObject *caller){
             qInfo() << "Config error! Using copy to clipboard: true";
         }
 
+        if ( !settings.contains("startMinimized") ) {
+            settings.setValue("startMinimized", true);
+            qInfo() << "Config error! Using startMinimized: true";
+        }
+
+        if ( !settings.contains("enableSystemTrayIcon") ) {
+            settings.setValue("enableSystemTrayIcon", true);
+            qInfo() << "Config error! Using enableSystemTrayIcon: true";
+        }
+
+        if ( !settings.contains("minimizeToSystemTray") ) {
+            settings.setValue("minimizeToSystemTray", true);
+            qInfo() << "Config error! Using minimizeToSystemTray: true";
+        }
+
+        if ( !settings.contains("systemTrayNotifications") ) {
+            settings.setValue("systemTrayNotifications", true);
+            qInfo() << "Config error! Using systemTrayNotifications: true";
+        }
+
         qInfo() << "Configuration loaded.\n";
     } else {
         qInfo() << "Config not found, using default settings.";
@@ -126,6 +155,12 @@ void utils::initSettings(QObject *caller){
         settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
         settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
         settings.setValue("usePrintCommand", true);
+        settings.setValue("minimizeToTaskbar", true);
+
+        settings.setValue("startMinimized", true);
+        settings.setValue("enableSystemTrayIcon", true);
+        settings.setValue("minimizeToSystemTray", true);
+        settings.setValue("systemTrayNotifications", true);
 
         QVariantMap lpnMap; lpnMap.insert("LPN_", 1);
         settings.setValue("lpnMap", lpnMap);
