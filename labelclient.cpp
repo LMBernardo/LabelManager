@@ -13,14 +13,10 @@ labelClient::labelClient(QObject *parent) : QObject(parent)
     connect(tcpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &labelClient::connectError);
 }
 
-void labelClient::sendData(std::string data){
+void labelClient::sendData(QString host, quint64 port, std::string data){
     tcpSocket->abort();
-    tcpSocket->connectToHost("localhost", 9754);
-
-//    QByteArray data;
-//    QDataStream out(&data, QIODevice::WriteOnly);
-//    out.setVersion(QDataStream::Qt_5_12);
-//    out << "Test data";
+    tcpSocket->connectToHost(host, port);
+    qDebug() << "Writing data to socket:" << QString::fromStdString(data);
     tcpSocket->write(data.c_str());
 }
 

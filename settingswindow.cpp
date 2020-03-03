@@ -62,7 +62,8 @@ void SettingsWindow::saveSettings(){
 
     QVariantMap lpnMap;
     for (int i = 0; i < ui->prefixComboBox->count(); i++){
-        lpnMap.insert(ui->prefixComboBox->itemText(i), utils::getLPN(ui->prefixComboBox->itemText(i)));
+        qDebug() << "Prefix iterated:" << ui->prefixComboBox->itemText(i);
+        lpnMap.insert(ui->prefixComboBox->itemText(i), Utils::getLPN(ui->prefixComboBox->itemText(i)));
     }
     settings.setValue("lpnMap", lpnMap);
     settings.setValue("lpnPadding", ui->paddingSpinBox->value());
@@ -71,6 +72,7 @@ void SettingsWindow::saveSettings(){
     settings.setValue("currentPrefix", ui->prefixComboBox->currentText());
     settings.setValue("copyClipboard", ui->copyCheckbox->isChecked());
     settings.setValue("lpnBatchMode", ui->lpnBatchModeCheckbox->isChecked());
+    settings.setValue("listenPort", ui->listenPortSpinbox->value());
 
     settings.endGroup();
 
@@ -109,7 +111,7 @@ void SettingsWindow::readSettings(){
     }
     ui->prefixComboBox->clear();
     ui->prefixComboBox->addItems( prefixList );
-    QString currentPrefix = settings.value("currentPrefix").toString();
+    QString currentPrefix = settings.value("currentPrefix", "LPN_").toString();
     int index = ui->prefixComboBox->findText(currentPrefix);
     ui->prefixComboBox->setCurrentIndex(index);
     ui->paddingSpinBox->setValue( settings.value("lpnPadding").toInt() );
@@ -121,7 +123,7 @@ void SettingsWindow::readSettings(){
         qDebug() << "Using 0";
         ui->lpnSpinBox->setValue(0);
     } else {
-        ui->lpnSpinBox->setValue( lpnMap.find(currentPrefix).value().toInt() );
+        ui->lpnSpinBox->setValue( lpnPrefixMap.value().toInt() );
     }
     ui->copyCheckbox->setChecked( settings.value("copyClipboard").toBool() );
 
@@ -145,7 +147,7 @@ void SettingsWindow::readSettings(){
         ui->sysTrayNotificationsCheckbox->setEnabled(false);
     }
 
-     ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
+     ui->lpnSpinBox->setPrefix(Utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
 }
 
 void SettingsWindow::on_settingsDialogButtons_accepted()
@@ -162,14 +164,12 @@ void SettingsWindow::on_settingsDialogButtons_rejected()
 void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
 {
     QSettings settings;
-    //QVariantMap lpnMap;
+    auto lpnMap = settings.value("lpnMap").toMap();
     switch (ui->settingsDialogButtons->buttonRole(button)){
     case QDialogButtonBox::ResetRole:
         settings.beginGroup("MainSettings");
-
-        //lpnMap = settings.value("lpnMap").toMap();
-
-        if (ui->tabWidget->currentIndex() == 1){
+        if (ui->tabWidget->currentIndex() == 2){
+            qDebug() << "Resetting index 2 settings";
             settings.setValue("serverAddress", "https://retnuh.us");
             settings.setValue("skuServerAddress", "http://skufindnr.retnuh.us");
             settings.setValue("skuServer", false);
@@ -178,18 +178,22 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             settings.setValue("usePrintCommand", true);
-        } else if (ui->tabWidget->currentIndex() == 2) {
+        } else if (ui->tabWidget->currentIndex() == 1) {
+            qDebug() << "Resetting index 1 settings";
             settings.setValue("startMinimized", true);
             settings.setValue("enableSystemTrayIcon", true);
             settings.setValue("minimizeToSystemTray", true);
             settings.setValue("systemTrayNotifications", true);
-        } else {
-            //lpnMap.insert("LPN_", 1);
-            //settings.setValue("lpnMap", lpnMap);
+        } else if (ui->tabWidget->currentIndex() == 0){
+            qDebug() << "Resetting index 0 settings";
+            if (lpnMap.find("LPN_") == lpnMap.end()){
+                lpnMap.insert("LPN_", 0);
+                settings.setValue("lpnMap", lpnMap);
+            }
             settings.setValue("lpnPadding", 4);
             settings.setValue("salvageLabel", "svsvsv");
             settings.setValue("remoteMode", false);
-            //settings.setValue("currentPrefix", "LPN_");
+            settings.setValue("currentPrefix", "LPN_");
             settings.setValue("copyClipboard", true);
         }
 
@@ -250,25 +254,26 @@ void SettingsWindow::on_submitted(QString prefix){
 void SettingsWindow::on_paddingSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value(), true));
+    ui->lpnSpinBox->setPrefix(Utils::lpnPrefix(ui->prefixComboBox->currentText(), value, ui->lpnSpinBox->value(), true));
 }
 
 void SettingsWindow::on_prefixComboBox_currentIndexChanged(const QString &text)
 {
     if ( !init ) return;
+    if (text.isEmpty()) return;
     QSettings settings;
 
     settings.setValue("MainSettings/currentPrefix", text);
     settings.sync();
 
-    ui->lpnSpinBox->setValue(utils::getLPN(text));
-    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
+    ui->lpnSpinBox->setValue(Utils::getLPN(text));
+    ui->lpnSpinBox->setPrefix(Utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
 }
 
 void SettingsWindow::on_lpnSpinBox_valueChanged(int value)
 {
     if ( !init ) return;
-    ui->lpnSpinBox->setPrefix(utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value, true));
+    ui->lpnSpinBox->setPrefix(Utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), value, true));
 }
 
 //void SettingsWindow::on_remoteModeCheckbox_stateChanged(int remoteMode)
@@ -305,7 +310,7 @@ void SettingsWindow::on_lpnSetButton_released()
         break;
 
     default:
-        ui->lpnSpinBox->setValue(utils::getLPN(ui->prefixComboBox->currentText()));
+        ui->lpnSpinBox->setValue(Utils::getLPN(ui->prefixComboBox->currentText()));
         break;
     }
 }

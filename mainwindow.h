@@ -12,11 +12,14 @@
 #include <QMessageBox>
 #include <QSystemTrayIcon>
 #include <QCloseEvent>
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 
 #include "labelserver.h"
 #include "labelclient.h"
 
 #include "websocket.h"
+#include "utils.h"
 
 namespace Ui{
 class MainUI;
@@ -77,6 +80,7 @@ private slots:
 
 private:
     Ui::MainUI *ui;
+    Utils utils;
     QIcon* icon;
     labelServer* lServer;
     labelClient* lClient;

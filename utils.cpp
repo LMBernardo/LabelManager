@@ -1,13 +1,9 @@
 #include "utils.h"
+Utils::Utils(QObject *parent) : QObject(parent)
+{
+}
 
-QFileSystemWatcher utils::settingsWatcher;
-
-//utils::utils(QObject *parent) : QObject(parent)
-//{
-
-//}
-
-int utils::getLPN(QString prefix){
+int Utils::getLPN(QString prefix){
     QSettings settings;
     settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
@@ -26,7 +22,7 @@ int utils::getLPN(QString prefix){
     return lpn;
 }
 
-QString utils::lpnPrefix(QString prefix, int padding, int lpn, bool prefixOnly){
+QString Utils::lpnPrefix(QString prefix, int padding, int lpn, bool prefixOnly){
     int lpnInit = lpn;
     int digits = 0; do { lpn /= 10; digits++; } while (lpn != 0);
     for (int i = 0; i < padding - digits; i++){
@@ -36,7 +32,7 @@ QString utils::lpnPrefix(QString prefix, int padding, int lpn, bool prefixOnly){
     else return prefix + QString::number(lpnInit);
 }
 
-QString utils::getFullLPN(QString prefix){
+QString Utils::getFullLPN(QString prefix){
     QSettings settings;
     settings.sync();
     if (prefix == "") prefix = settings.value("MainSettings/currentPrefix").toString();
@@ -45,7 +41,7 @@ QString utils::getFullLPN(QString prefix){
     return lpnString;
 }
 
-void utils::initSettings(QObject *caller){
+void Utils::initSettings(QObject *caller){
 
     QSettings settings;
 
@@ -189,13 +185,13 @@ void utils::initSettings(QObject *caller){
     // Watch settings file for changes (signal to caller & utils)
     settingsWatcher.addPath(settings.fileName());
     connect(&settingsWatcher, SIGNAL(fileChanged(const QString)), caller, SLOT(on_settingsChange(const QString)));
-    connect(&settingsWatcher, &QFileSystemWatcher::fileChanged, utils::on_settingsChange);
+    connect(&settingsWatcher, SIGNAL(fileChanged(const QString)), this, SLOT(on_settingsChange(const QString)));
 
     // Probably not necessary, should happen when we leave scope
     settings.sync();
 }
 
-void utils::on_settingsChange(const QString sFile){
+void Utils::on_settingsChange(const QString sFile){
     // Watch file again in case file has been updated by being replaced
     settingsWatcher.addPath(sFile);
 }
