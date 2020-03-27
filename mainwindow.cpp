@@ -167,7 +167,7 @@ int MainWindow::printLabel(QString command, QString label){
 void MainWindow::on_actionSettings_triggered()
 {
     SettingsWindow s;
-    s.setFixedHeight(225);
+    //s.setFixedHeight(280);
     //s.setFixedWidth(415);
     s.initSettingsWindow();
     s.exec();
