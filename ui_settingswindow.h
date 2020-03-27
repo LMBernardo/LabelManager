@@ -68,29 +68,29 @@ public:
     QSpacerItem *horizontalSpacer;
     QWidget *advancedSettingsTab;
     QGridLayout *gridLayout_2;
-    QLabel *remoteLabel;
-    QHBoxLayout *horizontalLayout;
-    QLineEdit *remoteLineEdit;
-    QPushButton *remoteSyncButton;
-    QCheckBox *remoteCheckbox;
-    QLabel *printerNameLabel;
-    QSpacerItem *verticalSpacer_2;
-    QHBoxLayout *horizontalLayout_5;
-    QLineEdit *printCommandLineEdit;
-    QCheckBox *printCommandCheckbox;
-    QLabel *printCommandLabel;
-    QLabel *printServerLabel;
     QLineEdit *printServerLineEdit;
-    QLineEdit *printerNameLineEdit;
+    QLabel *printCommandLabel;
     QHBoxLayout *horizontalLayout_2;
     QSpinBox *wsPortSpinbox;
     QCheckBox *wsServerCheckbox;
     QLabel *listenPortLabel;
     QSpinBox *listenPortSpinbox;
     QCheckBox *skuServerCheckbox;
+    QLabel *listenPortLabel_2;
+    QLineEdit *printerNameLineEdit;
+    QLabel *remoteLabel;
+    QHBoxLayout *horizontalLayout_5;
+    QLineEdit *printCommandLineEdit;
+    QCheckBox *printCommandCheckbox;
     QLineEdit *formatStringLineEdit;
     QLabel *label;
-    QLabel *listenPortLabel_2;
+    QHBoxLayout *horizontalLayout;
+    QLineEdit *remoteLineEdit;
+    QPushButton *remoteSyncButton;
+    QCheckBox *remoteCheckbox;
+    QLabel *printerNameLabel;
+    QLabel *printServerLabel;
+    QSpacerItem *verticalSpacer_2;
     QDialogButtonBox *settingsDialogButtons;
 
     void setupUi(QDialog *SettingsUI)
@@ -98,13 +98,14 @@ public:
         if (SettingsUI->objectName().isEmpty())
             SettingsUI->setObjectName(QString::fromUtf8("SettingsUI"));
         SettingsUI->setWindowModality(Qt::ApplicationModal);
-        SettingsUI->resize(435, 244);
-        QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        SettingsUI->resize(435, 280);
+        QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(SettingsUI->sizePolicy().hasHeightForWidth());
         SettingsUI->setSizePolicy(sizePolicy);
-        SettingsUI->setMaximumSize(QSize(640, 300));
+        SettingsUI->setMinimumSize(QSize(0, 280));
+        SettingsUI->setMaximumSize(QSize(640, 320));
         SettingsUI->setModal(true);
         verticalLayout = new QVBoxLayout(SettingsUI);
         verticalLayout->setSpacing(5);
@@ -113,13 +114,13 @@ public:
         verticalLayout->setContentsMargins(5, -1, -1, 7);
         tabWidget = new QTabWidget(SettingsUI);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
         tabWidget->setSizePolicy(sizePolicy1);
         tabWidget->setMinimumSize(QSize(0, 200));
-        tabWidget->setMaximumSize(QSize(16777215, 184));
+        tabWidget->setMaximumSize(QSize(16777215, 200));
         labelSettingsTab = new QWidget();
         labelSettingsTab->setObjectName(QString::fromUtf8("labelSettingsTab"));
         labelSettingsTab->setMaximumSize(QSize(16777215, 156));
@@ -207,6 +208,11 @@ public:
 
         salvageLabel = new QLabel(labelSettingsTab);
         salvageLabel->setObjectName(QString::fromUtf8("salvageLabel"));
+        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(salvageLabel->sizePolicy().hasHeightForWidth());
+        salvageLabel->setSizePolicy(sizePolicy4);
         salvageLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         SettingsLayout->addWidget(salvageLabel, 3, 0, 1, 1);
@@ -224,6 +230,8 @@ public:
 
         paddingLabel = new QLabel(labelSettingsTab);
         paddingLabel->setObjectName(QString::fromUtf8("paddingLabel"));
+        sizePolicy4.setHeightForWidth(paddingLabel->sizePolicy().hasHeightForWidth());
+        paddingLabel->setSizePolicy(sizePolicy4);
         paddingLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         SettingsLayout->addWidget(paddingLabel, 2, 0, 1, 1);
@@ -239,6 +247,8 @@ public:
 
         prefixLabel = new QLabel(labelSettingsTab);
         prefixLabel->setObjectName(QString::fromUtf8("prefixLabel"));
+        sizePolicy4.setHeightForWidth(prefixLabel->sizePolicy().hasHeightForWidth());
+        prefixLabel->setSizePolicy(sizePolicy4);
         prefixLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         SettingsLayout->addWidget(prefixLabel, 0, 0, 1, 1);
@@ -326,81 +336,11 @@ public:
         advancedSettingsTab->setObjectName(QString::fromUtf8("advancedSettingsTab"));
         gridLayout_2 = new QGridLayout(advancedSettingsTab);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        remoteLabel = new QLabel(advancedSettingsTab);
-        remoteLabel->setObjectName(QString::fromUtf8("remoteLabel"));
-        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Minimum);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(remoteLabel->sizePolicy().hasHeightForWidth());
-        remoteLabel->setSizePolicy(sizePolicy4);
-        remoteLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        printServerLineEdit = new QLineEdit(advancedSettingsTab);
+        printServerLineEdit->setObjectName(QString::fromUtf8("printServerLineEdit"));
+        printServerLineEdit->setEnabled(true);
 
-        gridLayout_2->addWidget(remoteLabel, 0, 0, 1, 1);
-
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        remoteLineEdit = new QLineEdit(advancedSettingsTab);
-        remoteLineEdit->setObjectName(QString::fromUtf8("remoteLineEdit"));
-        QSizePolicy sizePolicy5(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(remoteLineEdit->sizePolicy().hasHeightForWidth());
-        remoteLineEdit->setSizePolicy(sizePolicy5);
-        remoteLineEdit->setClearButtonEnabled(false);
-
-        horizontalLayout->addWidget(remoteLineEdit);
-
-        remoteSyncButton = new QPushButton(advancedSettingsTab);
-        remoteSyncButton->setObjectName(QString::fromUtf8("remoteSyncButton"));
-        sizePolicy3.setHeightForWidth(remoteSyncButton->sizePolicy().hasHeightForWidth());
-        remoteSyncButton->setSizePolicy(sizePolicy3);
-        remoteSyncButton->setMaximumSize(QSize(58, 16777215));
-
-        horizontalLayout->addWidget(remoteSyncButton);
-
-        remoteCheckbox = new QCheckBox(advancedSettingsTab);
-        remoteCheckbox->setObjectName(QString::fromUtf8("remoteCheckbox"));
-        remoteCheckbox->setEnabled(false);
-        QSizePolicy sizePolicy6(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(remoteCheckbox->sizePolicy().hasHeightForWidth());
-        remoteCheckbox->setSizePolicy(sizePolicy6);
-        remoteCheckbox->setMaximumSize(QSize(16777215, 25));
-        remoteCheckbox->setLayoutDirection(Qt::LeftToRight);
-        remoteCheckbox->setChecked(false);
-
-        horizontalLayout->addWidget(remoteCheckbox);
-
-
-        gridLayout_2->addLayout(horizontalLayout, 0, 1, 1, 1);
-
-        printerNameLabel = new QLabel(advancedSettingsTab);
-        printerNameLabel->setObjectName(QString::fromUtf8("printerNameLabel"));
-        printerNameLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        gridLayout_2->addWidget(printerNameLabel, 3, 0, 1, 1);
-
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_2->addItem(verticalSpacer_2, 5, 1, 1, 1);
-
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        printCommandLineEdit = new QLineEdit(advancedSettingsTab);
-        printCommandLineEdit->setObjectName(QString::fromUtf8("printCommandLineEdit"));
-
-        horizontalLayout_5->addWidget(printCommandLineEdit);
-
-        printCommandCheckbox = new QCheckBox(advancedSettingsTab);
-        printCommandCheckbox->setObjectName(QString::fromUtf8("printCommandCheckbox"));
-        printCommandCheckbox->setEnabled(false);
-        printCommandCheckbox->setChecked(true);
-
-        horizontalLayout_5->addWidget(printCommandCheckbox);
-
-
-        gridLayout_2->addLayout(horizontalLayout_5, 4, 1, 1, 1);
+        gridLayout_2->addWidget(printServerLineEdit, 2, 1, 1, 1);
 
         printCommandLabel = new QLabel(advancedSettingsTab);
         printCommandLabel->setObjectName(QString::fromUtf8("printCommandLabel"));
@@ -408,32 +348,15 @@ public:
 
         gridLayout_2->addWidget(printCommandLabel, 4, 0, 1, 1);
 
-        printServerLabel = new QLabel(advancedSettingsTab);
-        printServerLabel->setObjectName(QString::fromUtf8("printServerLabel"));
-        printServerLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        gridLayout_2->addWidget(printServerLabel, 2, 0, 1, 1);
-
-        printServerLineEdit = new QLineEdit(advancedSettingsTab);
-        printServerLineEdit->setObjectName(QString::fromUtf8("printServerLineEdit"));
-        printServerLineEdit->setEnabled(true);
-
-        gridLayout_2->addWidget(printServerLineEdit, 2, 1, 1, 1);
-
-        printerNameLineEdit = new QLineEdit(advancedSettingsTab);
-        printerNameLineEdit->setObjectName(QString::fromUtf8("printerNameLineEdit"));
-
-        gridLayout_2->addWidget(printerNameLineEdit, 3, 1, 1, 1);
-
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         wsPortSpinbox = new QSpinBox(advancedSettingsTab);
         wsPortSpinbox->setObjectName(QString::fromUtf8("wsPortSpinbox"));
-        QSizePolicy sizePolicy7(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        sizePolicy7.setHorizontalStretch(0);
-        sizePolicy7.setVerticalStretch(0);
-        sizePolicy7.setHeightForWidth(wsPortSpinbox->sizePolicy().hasHeightForWidth());
-        wsPortSpinbox->setSizePolicy(sizePolicy7);
+        QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(wsPortSpinbox->sizePolicy().hasHeightForWidth());
+        wsPortSpinbox->setSizePolicy(sizePolicy5);
         wsPortSpinbox->setMinimumSize(QSize(0, 20));
         wsPortSpinbox->setMaximum(65535);
 
@@ -455,8 +378,8 @@ public:
 
         listenPortSpinbox = new QSpinBox(advancedSettingsTab);
         listenPortSpinbox->setObjectName(QString::fromUtf8("listenPortSpinbox"));
-        sizePolicy7.setHeightForWidth(listenPortSpinbox->sizePolicy().hasHeightForWidth());
-        listenPortSpinbox->setSizePolicy(sizePolicy7);
+        sizePolicy5.setHeightForWidth(listenPortSpinbox->sizePolicy().hasHeightForWidth());
+        listenPortSpinbox->setSizePolicy(sizePolicy5);
         listenPortSpinbox->setMinimumSize(QSize(0, 20));
         listenPortSpinbox->setMaximum(65535);
 
@@ -471,6 +394,45 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_2, 1, 1, 1, 1);
 
+        listenPortLabel_2 = new QLabel(advancedSettingsTab);
+        listenPortLabel_2->setObjectName(QString::fromUtf8("listenPortLabel_2"));
+        listenPortLabel_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout_2->addWidget(listenPortLabel_2, 1, 0, 1, 1);
+
+        printerNameLineEdit = new QLineEdit(advancedSettingsTab);
+        printerNameLineEdit->setObjectName(QString::fromUtf8("printerNameLineEdit"));
+
+        gridLayout_2->addWidget(printerNameLineEdit, 3, 1, 1, 1);
+
+        remoteLabel = new QLabel(advancedSettingsTab);
+        remoteLabel->setObjectName(QString::fromUtf8("remoteLabel"));
+        QSizePolicy sizePolicy6(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(remoteLabel->sizePolicy().hasHeightForWidth());
+        remoteLabel->setSizePolicy(sizePolicy6);
+        remoteLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout_2->addWidget(remoteLabel, 0, 0, 1, 1);
+
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        printCommandLineEdit = new QLineEdit(advancedSettingsTab);
+        printCommandLineEdit->setObjectName(QString::fromUtf8("printCommandLineEdit"));
+
+        horizontalLayout_5->addWidget(printCommandLineEdit);
+
+        printCommandCheckbox = new QCheckBox(advancedSettingsTab);
+        printCommandCheckbox->setObjectName(QString::fromUtf8("printCommandCheckbox"));
+        printCommandCheckbox->setEnabled(false);
+        printCommandCheckbox->setChecked(true);
+
+        horizontalLayout_5->addWidget(printCommandCheckbox);
+
+
+        gridLayout_2->addLayout(horizontalLayout_5, 4, 1, 1, 1);
+
         formatStringLineEdit = new QLineEdit(advancedSettingsTab);
         formatStringLineEdit->setObjectName(QString::fromUtf8("formatStringLineEdit"));
 
@@ -482,11 +444,56 @@ public:
 
         gridLayout_2->addWidget(label, 6, 0, 1, 1);
 
-        listenPortLabel_2 = new QLabel(advancedSettingsTab);
-        listenPortLabel_2->setObjectName(QString::fromUtf8("listenPortLabel_2"));
-        listenPortLabel_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        remoteLineEdit = new QLineEdit(advancedSettingsTab);
+        remoteLineEdit->setObjectName(QString::fromUtf8("remoteLineEdit"));
+        sizePolicy1.setHeightForWidth(remoteLineEdit->sizePolicy().hasHeightForWidth());
+        remoteLineEdit->setSizePolicy(sizePolicy1);
+        remoteLineEdit->setClearButtonEnabled(false);
 
-        gridLayout_2->addWidget(listenPortLabel_2, 1, 0, 1, 1);
+        horizontalLayout->addWidget(remoteLineEdit);
+
+        remoteSyncButton = new QPushButton(advancedSettingsTab);
+        remoteSyncButton->setObjectName(QString::fromUtf8("remoteSyncButton"));
+        sizePolicy3.setHeightForWidth(remoteSyncButton->sizePolicy().hasHeightForWidth());
+        remoteSyncButton->setSizePolicy(sizePolicy3);
+        remoteSyncButton->setMaximumSize(QSize(58, 16777215));
+
+        horizontalLayout->addWidget(remoteSyncButton);
+
+        remoteCheckbox = new QCheckBox(advancedSettingsTab);
+        remoteCheckbox->setObjectName(QString::fromUtf8("remoteCheckbox"));
+        remoteCheckbox->setEnabled(false);
+        QSizePolicy sizePolicy7(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(remoteCheckbox->sizePolicy().hasHeightForWidth());
+        remoteCheckbox->setSizePolicy(sizePolicy7);
+        remoteCheckbox->setMaximumSize(QSize(16777215, 25));
+        remoteCheckbox->setLayoutDirection(Qt::LeftToRight);
+        remoteCheckbox->setChecked(false);
+
+        horizontalLayout->addWidget(remoteCheckbox);
+
+
+        gridLayout_2->addLayout(horizontalLayout, 0, 1, 1, 1);
+
+        printerNameLabel = new QLabel(advancedSettingsTab);
+        printerNameLabel->setObjectName(QString::fromUtf8("printerNameLabel"));
+        printerNameLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout_2->addWidget(printerNameLabel, 3, 0, 1, 1);
+
+        printServerLabel = new QLabel(advancedSettingsTab);
+        printServerLabel->setObjectName(QString::fromUtf8("printServerLabel"));
+        printServerLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout_2->addWidget(printServerLabel, 2, 0, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_2->addItem(verticalSpacer_2, 7, 1, 1, 1);
 
         tabWidget->addTab(advancedSettingsTab, QString());
 
@@ -495,8 +502,11 @@ public:
         settingsDialogButtons = new QDialogButtonBox(SettingsUI);
         settingsDialogButtons->setObjectName(QString::fromUtf8("settingsDialogButtons"));
         settingsDialogButtons->setEnabled(true);
-        sizePolicy.setHeightForWidth(settingsDialogButtons->sizePolicy().hasHeightForWidth());
-        settingsDialogButtons->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy8(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(settingsDialogButtons->sizePolicy().hasHeightForWidth());
+        settingsDialogButtons->setSizePolicy(sizePolicy8);
         settingsDialogButtons->setLayoutDirection(Qt::LeftToRight);
         settingsDialogButtons->setOrientation(Qt::Horizontal);
         settingsDialogButtons->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults);
@@ -545,7 +555,24 @@ public:
         startMinimizedLabel->setText(QCoreApplication::translate("SettingsUI", "Start minimized", nullptr));
         enableSysTrayLabel->setText(QCoreApplication::translate("SettingsUI", "Enable system tray icon", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(generalSettingsTab), QCoreApplication::translate("SettingsUI", "General", nullptr));
+        printServerLineEdit->setPlaceholderText(QString());
+        printCommandLabel->setText(QCoreApplication::translate("SettingsUI", "Print Command:", nullptr));
+#if QT_CONFIG(tooltip)
+        wsServerCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Fetch SKU from LPN", nullptr));
+#endif // QT_CONFIG(tooltip)
+        wsServerCheckbox->setText(QString());
+        listenPortLabel->setText(QCoreApplication::translate("SettingsUI", "Listen Port:", nullptr));
+#if QT_CONFIG(tooltip)
+        skuServerCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Fetch SKU from LPN", nullptr));
+#endif // QT_CONFIG(tooltip)
+        skuServerCheckbox->setText(QString());
+        listenPortLabel_2->setText(QCoreApplication::translate("SettingsUI", "WebSocket:", nullptr));
         remoteLabel->setText(QCoreApplication::translate("SettingsUI", "Sync Server:", nullptr));
+#if QT_CONFIG(tooltip)
+        printCommandCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Use custom print command", nullptr));
+#endif // QT_CONFIG(tooltip)
+        printCommandCheckbox->setText(QString());
+        label->setText(QCoreApplication::translate("SettingsUI", "Format String:", nullptr));
         remoteLineEdit->setPlaceholderText(QString());
 #if QT_CONFIG(tooltip)
         remoteSyncButton->setToolTip(QCoreApplication::translate("SettingsUI", "Send local data to server", nullptr));
@@ -556,24 +583,7 @@ public:
 #endif // QT_CONFIG(tooltip)
         remoteCheckbox->setText(QString());
         printerNameLabel->setText(QCoreApplication::translate("SettingsUI", "Printer Name:", nullptr));
-#if QT_CONFIG(tooltip)
-        printCommandCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Use custom print command", nullptr));
-#endif // QT_CONFIG(tooltip)
-        printCommandCheckbox->setText(QString());
-        printCommandLabel->setText(QCoreApplication::translate("SettingsUI", "Print Command:", nullptr));
         printServerLabel->setText(QCoreApplication::translate("SettingsUI", "Print Server:", nullptr));
-        printServerLineEdit->setPlaceholderText(QString());
-#if QT_CONFIG(tooltip)
-        wsServerCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Fetch SKU from LPN", nullptr));
-#endif // QT_CONFIG(tooltip)
-        wsServerCheckbox->setText(QString());
-        listenPortLabel->setText(QCoreApplication::translate("SettingsUI", "Listen Port:", nullptr));
-#if QT_CONFIG(tooltip)
-        skuServerCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Fetch SKU from LPN", nullptr));
-#endif // QT_CONFIG(tooltip)
-        skuServerCheckbox->setText(QString());
-        label->setText(QCoreApplication::translate("SettingsUI", "Format String:", nullptr));
-        listenPortLabel_2->setText(QCoreApplication::translate("SettingsUI", "WebSocket:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(advancedSettingsTab), QCoreApplication::translate("SettingsUI", "Advanced", nullptr));
     } // retranslateUi
 
