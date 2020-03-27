@@ -59,7 +59,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="labelSettingsTab">
       <property name="maximumSize">
@@ -355,7 +355,55 @@
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="4" column="1">
+        <item row="3" column="1">
+         <widget class="QLabel" name="minimizeToSysTrayLabel">
+          <property name="text">
+           <string>Minimize to system tray</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="enableSysTrayCheckbox">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="startMinimizedCheckbox">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QCheckBox" name="sysTrayNotificationsCheckbox">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="sysTrayNotificationsLabel">
+          <property name="text">
+           <string>System tray notifications</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QCheckBox" name="minimizeToSysTrayCheckbox">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
          <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -368,7 +416,7 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="1">
          <widget class="QLabel" name="startMinimizedLabel">
           <property name="text">
            <string>Start minimized</string>
@@ -378,21 +426,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="enableSysTrayCheckbox">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QCheckBox" name="sysTrayNotificationsCheckbox">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
+        <item row="2" column="1">
          <widget class="QLabel" name="enableSysTrayLabel">
           <property name="text">
            <string>Enable system tray icon</string>
@@ -402,41 +436,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="sysTrayNotificationsLabel">
-          <property name="text">
-           <string>System tray notifications</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QCheckBox" name="minimizeToSysTrayCheckbox">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="minimizeToSysTrayLabel">
-          <property name="text">
-           <string>Minimize to system tray</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QCheckBox" name="startMinimizedCheckbox">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
+        <item row="1" column="3">
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>

@@ -312,7 +312,7 @@ public:
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer, 0, 3, 1, 1);
+        gridLayout->addItem(horizontalSpacer, 0, 0, 1, 1);
 
         tabWidget->addTab(generalSettingsTab, QString());
         advancedSettingsTab = new QWidget();
@@ -478,7 +478,7 @@ public:
         QObject::connect(settingsDialogButtons, SIGNAL(accepted()), SettingsUI, SLOT(accept()));
         QObject::connect(settingsDialogButtons, SIGNAL(rejected()), SettingsUI, SLOT(reject()));
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(SettingsUI);
