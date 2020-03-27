@@ -9,23 +9,23 @@
 
 #include <QMainWindow>
 
-class utils : public QObject
+class Utils : public QObject
 {
     Q_OBJECT
 public:
-    //explicit utils(QObject *parent = nullptr);
+    explicit Utils(QObject *parent = nullptr);
 
     static int getLPN(QString prefix);
     static QString lpnPrefix(QString prefix, int padding, int lpn, bool prefixOnly = false);
     static QString getFullLPN(QString prefix);
-    static void initSettings(QObject *caller);
+    void initSettings(QObject *caller);
 
-    static QFileSystemWatcher settingsWatcher;
+    QFileSystemWatcher settingsWatcher;
 
 signals:
 
 public slots:
-    static void on_settingsChange(QString sFile);
+    void on_settingsChange(QString sFile);
 
 };
 

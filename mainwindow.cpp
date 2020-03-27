@@ -46,11 +46,9 @@ void MainWindow::init(){
 
     ui->lpnStatus->setVisible(false);
     ui->skuStatus->setVisible(false);
-    utils::initSettings(this);
+    utils.initSettings(this);
 
     lClient = new labelClient(this);
-
-
     lServer = new labelServer(this, static_cast<unsigned short>(settings.value("MainSettings/listenPort").toInt()));
 
     wsServer = new webSocket(9458, this);
@@ -72,7 +70,6 @@ void MainWindow::updateUi(){
     QSettings settings;
 
     settings.sync();
-
     settings.beginGroup("MainSettings");
 
     if (settings.value("enableSystemTrayIcon").toBool()) sysTray->show();
@@ -89,7 +86,7 @@ void MainWindow::updateUi(){
         ui->skuLineEdit->setPlaceholderText("");
     }
 
-    QString lpnString = utils::getFullLPN(settings.value("currentPrefix").toString());
+    QString lpnString = Utils::getFullLPN(settings.value("currentPrefix").toString());
     ui->lpnLineEdit->setText(lpnString);
 
     settings.endGroup();
@@ -190,17 +187,17 @@ void MainWindow::on_printLPNButton_released()
     QSettings settings;
     QClipboard *clipboard = QApplication::clipboard();
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
-    //QString lpnString = utils::getFullLPN(prefix);
+    //QString lpnString = Utils::getFullLPN(prefix);
     QVariantMap lpnMap = settings.value("MainSettings/lpnMap").toMap();
     int status = 0;
-    int currentLPN = utils::getLPN(prefix);
-    QString lpnString = utils::lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
+    int currentLPN = Utils::getLPN(prefix);
+    QString lpnString = Utils::lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
     for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){
         status = printLabel(settings.value("MainSettings/printCommand").toString(), lpnString);
         if ( status != 0 ) break;
         if (settings.value("MainSettings/lpnBatchMode").toBool() == true){
             currentLPN++;
-            lpnString = utils::lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
+            lpnString = Utils::lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), currentLPN);
         }
     }
     qInfo() << "Status:" << QString("%1").arg(QString::number(status));
@@ -235,12 +232,16 @@ void MainWindow::on_skuLineEdit_returnPressed()
 
 void MainWindow::on_printSKUButton_released()
 {
-    ui->printSKUButton->setEnabled(false);
+//    ui->printSKUButton->setEnabled(false);
+//    QSettings settings;
+//    for (int i = 0; i < ui->skuQuantitySpinBox->value(); i++){
+//        printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
+//    }
+//    ui->printSKUButton->setEnabled(true);
     QSettings settings;
-    for (int i = 0; i < ui->skuQuantitySpinBox->value(); i++){
-        printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
-    }
-    ui->printSKUButton->setEnabled(true);
+    QString host = settings.value("MainSettings/printServer").toString();
+    quint64 port = settings.value("MainSettings/listenPort").toInt();
+    lClient->sendData(host, port, "Test Data");
 }
 
 void MainWindow::on_textLineEdit_returnPressed()
@@ -294,8 +295,8 @@ void MainWindow::on_reprintLPNButton_released()
 {
     QSettings settings;
     QString prefix = settings.value("MainSettings/currentPrefix").toString();
-    int prevLPN = utils::getLPN(prefix)-1;
-    QString lpnString = utils::lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), prevLPN);
+    int prevLPN = Utils::getLPN(prefix)-1;
+    QString lpnString = Utils::lpnPrefix(prefix, settings.value("MainSettings/lpnPadding").toInt(), prevLPN);
     lpnString.append(QString::number(prevLPN));
     ui->reprintLPNButton->setEnabled(false);
     for (int i = 0; i < ui->lpnQuantitySpinBox->value(); i++){

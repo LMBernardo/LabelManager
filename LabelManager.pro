@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network websockets
+QT       += core gui network websockets printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -60,9 +60,10 @@ unix: print_script.files = ./print_label.sh
 unix: print_script_post.path = ./
 unix: print_script_post.commands += chmod +x $(INSTALL_ROOT)/usr/bin/print_label.sh;
 
-QMAKE_EXTRA_TARGETS += print_script_post
+unix: QMAKE_EXTRA_TARGETS += print_script_post
 
-INSTALLS += desktop print_script print_script_post
+unix: INSTALLS += desktop print_script print_script_post
+else: INSTALLS += desktop
 
 RESOURCES += \
     resources.qrc
@@ -72,5 +73,5 @@ FORMS += \
     settingswindow.ui \
     getstringdialog.ui
 
-DISTFILES += \
+unix: DISTFILES += \
     print_label.sh

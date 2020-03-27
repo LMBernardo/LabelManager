@@ -11,7 +11,7 @@ class labelClient : public QObject
     Q_OBJECT
 public:
     explicit labelClient(QObject *parent = nullptr);
-    void sendData(std::string data);
+    void sendData(QString host = "localhost", quint64 port = 9457, std::string data = "Undefined");
 
 private:
     QTcpSocket *tcpSocket = nullptr;
