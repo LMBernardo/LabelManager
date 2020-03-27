@@ -51,8 +51,12 @@ void MainWindow::init(){
     lClient = new labelClient(this);
     lServer = new labelServer(this, static_cast<unsigned short>(settings.value("MainSettings/listenPort").toInt()));
 
-    wsServer = new webSocket(9458, this);
-    connect(wsServer, &webSocket::wsMessageReceived, this, &MainWindow::on_wsMessageReceived);
+    if (settings.value("MainSettings/wsEnabled").toBool()){
+        wsServer = new webSocket(this, static_cast<unsigned short>(settings.value("MainSettings/wsPort").toInt()));
+        connect(wsServer, &webSocket::wsMessageReceived, this, &MainWindow::on_wsMessageReceived);
+    } else {
+        qInfo() << "Websocket server disabled.";
+    }
 
     if (settings.value("MainSettings/startMinimized").toBool()) this->showMinimized();
 

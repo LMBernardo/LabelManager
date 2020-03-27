@@ -75,6 +75,17 @@ void Utils::initSettings(QObject *caller){
             qInfo() << "Config error! Using listen port: 9457";
         }
 
+
+        if ( !settings.contains("wsEnabled") ) {
+            settings.setValue("wsEnabled", true);
+            qInfo() << "Config error! Using websocket enabled: true";
+        }
+
+        if ( !settings.contains("wsPort") ) {
+            settings.setValue("wsPort", 9458);
+            qInfo() << "Config error! Using websocket port: 9458";
+        }
+
         if ( !settings.contains("printerName") ) {
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             qInfo() << "Config error! Using printer name: Zebra_Technologies_ZTC_ZP_500_";
@@ -152,6 +163,9 @@ void Utils::initSettings(QObject *caller){
         settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
         settings.setValue("usePrintCommand", true);
         settings.setValue("minimizeToTaskbar", true);
+        settings.setValue("listenPort", 9457);
+        settings.setValue("wsPort", 9458);
+        settings.setValue("wsEnabled", true);
 
         settings.setValue("startMinimized", true);
         settings.setValue("enableSystemTrayIcon", true);

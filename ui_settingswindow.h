@@ -56,15 +56,15 @@ public:
     QWidget *generalSettingsTab;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
-    QSpacerItem *verticalSpacer_3;
-    QLabel *startMinimizedLabel;
+    QLabel *minimizeToSysTrayLabel;
     QCheckBox *enableSysTrayCheckbox;
+    QCheckBox *startMinimizedCheckbox;
     QCheckBox *sysTrayNotificationsCheckbox;
-    QLabel *enableSysTrayLabel;
     QLabel *sysTrayNotificationsLabel;
     QCheckBox *minimizeToSysTrayCheckbox;
-    QLabel *minimizeToSysTrayLabel;
-    QCheckBox *startMinimizedCheckbox;
+    QSpacerItem *verticalSpacer_3;
+    QLabel *startMinimizedLabel;
+    QLabel *enableSysTrayLabel;
     QSpacerItem *horizontalSpacer;
     QWidget *advancedSettingsTab;
     QGridLayout *gridLayout_2;
@@ -83,11 +83,14 @@ public:
     QLineEdit *printServerLineEdit;
     QLineEdit *printerNameLineEdit;
     QHBoxLayout *horizontalLayout_2;
+    QSpinBox *wsPortSpinbox;
+    QCheckBox *wsServerCheckbox;
+    QLabel *listenPortLabel;
     QSpinBox *listenPortSpinbox;
     QCheckBox *skuServerCheckbox;
     QLineEdit *formatStringLineEdit;
     QLabel *label;
-    QLabel *listenPortLabel;
+    QLabel *listenPortLabel_2;
     QDialogButtonBox *settingsDialogButtons;
 
     void setupUi(QDialog *SettingsUI)
@@ -95,8 +98,8 @@ public:
         if (SettingsUI->objectName().isEmpty())
             SettingsUI->setObjectName(QString::fromUtf8("SettingsUI"));
         SettingsUI->setWindowModality(Qt::ApplicationModal);
-        SettingsUI->resize(435, 228);
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        SettingsUI->resize(435, 244);
+        QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(SettingsUI->sizePolicy().hasHeightForWidth());
@@ -110,11 +113,12 @@ public:
         verticalLayout->setContentsMargins(5, -1, -1, 7);
         tabWidget = new QTabWidget(SettingsUI);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
         tabWidget->setSizePolicy(sizePolicy1);
+        tabWidget->setMinimumSize(QSize(0, 200));
         tabWidget->setMaximumSize(QSize(16777215, 184));
         labelSettingsTab = new QWidget();
         labelSettingsTab->setObjectName(QString::fromUtf8("labelSettingsTab"));
@@ -126,19 +130,22 @@ public:
         SettingsLayout->setContentsMargins(5, -1, 5, -1);
         lpnLabel = new QLabel(labelSettingsTab);
         lpnLabel->setObjectName(QString::fromUtf8("lpnLabel"));
-        sizePolicy.setHeightForWidth(lpnLabel->sizePolicy().hasHeightForWidth());
-        lpnLabel->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(lpnLabel->sizePolicy().hasHeightForWidth());
+        lpnLabel->setSizePolicy(sizePolicy2);
         lpnLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         SettingsLayout->addWidget(lpnLabel, 1, 0, 1, 1);
 
         prefixComboBox = new QComboBox(labelSettingsTab);
         prefixComboBox->setObjectName(QString::fromUtf8("prefixComboBox"));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(prefixComboBox->sizePolicy().hasHeightForWidth());
-        prefixComboBox->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(prefixComboBox->sizePolicy().hasHeightForWidth());
+        prefixComboBox->setSizePolicy(sizePolicy3);
         prefixComboBox->setEditable(false);
         prefixComboBox->setMaxVisibleItems(10);
         prefixComboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
@@ -147,23 +154,23 @@ public:
 
         lpnSetButton = new QPushButton(labelSettingsTab);
         lpnSetButton->setObjectName(QString::fromUtf8("lpnSetButton"));
-        sizePolicy2.setHeightForWidth(lpnSetButton->sizePolicy().hasHeightForWidth());
-        lpnSetButton->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lpnSetButton->sizePolicy().hasHeightForWidth());
+        lpnSetButton->setSizePolicy(sizePolicy3);
         lpnSetButton->setMaximumSize(QSize(16777215, 16777215));
 
         SettingsLayout->addWidget(lpnSetButton, 1, 3, 1, 1);
 
         salvageLineEdit = new QLineEdit(labelSettingsTab);
         salvageLineEdit->setObjectName(QString::fromUtf8("salvageLineEdit"));
-        sizePolicy2.setHeightForWidth(salvageLineEdit->sizePolicy().hasHeightForWidth());
-        salvageLineEdit->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(salvageLineEdit->sizePolicy().hasHeightForWidth());
+        salvageLineEdit->setSizePolicy(sizePolicy3);
 
         SettingsLayout->addWidget(salvageLineEdit, 3, 1, 1, 3);
 
         paddingSpinBox = new QSpinBox(labelSettingsTab);
         paddingSpinBox->setObjectName(QString::fromUtf8("paddingSpinBox"));
-        sizePolicy2.setHeightForWidth(paddingSpinBox->sizePolicy().hasHeightForWidth());
-        paddingSpinBox->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(paddingSpinBox->sizePolicy().hasHeightForWidth());
+        paddingSpinBox->setSizePolicy(sizePolicy3);
         paddingSpinBox->setMinimum(1);
         paddingSpinBox->setMaximum(10);
 
@@ -171,8 +178,8 @@ public:
 
         deletePrefixButton = new QPushButton(labelSettingsTab);
         deletePrefixButton->setObjectName(QString::fromUtf8("deletePrefixButton"));
-        sizePolicy2.setHeightForWidth(deletePrefixButton->sizePolicy().hasHeightForWidth());
-        deletePrefixButton->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(deletePrefixButton->sizePolicy().hasHeightForWidth());
+        deletePrefixButton->setSizePolicy(sizePolicy3);
         deletePrefixButton->setMaximumSize(QSize(16777215, 16777215));
         deletePrefixButton->setLayoutDirection(Qt::LeftToRight);
 
@@ -192,8 +199,8 @@ public:
 
         addPrefixButton = new QPushButton(labelSettingsTab);
         addPrefixButton->setObjectName(QString::fromUtf8("addPrefixButton"));
-        sizePolicy2.setHeightForWidth(addPrefixButton->sizePolicy().hasHeightForWidth());
-        addPrefixButton->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(addPrefixButton->sizePolicy().hasHeightForWidth());
+        addPrefixButton->setSizePolicy(sizePolicy3);
         addPrefixButton->setMaximumSize(QSize(60, 16777215));
 
         SettingsLayout->addWidget(addPrefixButton, 0, 2, 1, 1);
@@ -206,8 +213,8 @@ public:
 
         lpnSpinBox = new QSpinBox(labelSettingsTab);
         lpnSpinBox->setObjectName(QString::fromUtf8("lpnSpinBox"));
-        sizePolicy.setHeightForWidth(lpnSpinBox->sizePolicy().hasHeightForWidth());
-        lpnSpinBox->setSizePolicy(sizePolicy);
+        sizePolicy2.setHeightForWidth(lpnSpinBox->sizePolicy().hasHeightForWidth());
+        lpnSpinBox->setSizePolicy(sizePolicy2);
         lpnSpinBox->setMinimumSize(QSize(110, 0));
         lpnSpinBox->setMaximumSize(QSize(115, 16777215));
         lpnSpinBox->setMaximum(99999999);
@@ -223,8 +230,8 @@ public:
 
         lpnFetchButton = new QPushButton(labelSettingsTab);
         lpnFetchButton->setObjectName(QString::fromUtf8("lpnFetchButton"));
-        sizePolicy2.setHeightForWidth(lpnFetchButton->sizePolicy().hasHeightForWidth());
-        lpnFetchButton->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lpnFetchButton->sizePolicy().hasHeightForWidth());
+        lpnFetchButton->setSizePolicy(sizePolicy3);
         lpnFetchButton->setMaximumSize(QSize(60, 16777215));
         lpnFetchButton->setLayoutDirection(Qt::LeftToRight);
 
@@ -262,57 +269,57 @@ public:
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        minimizeToSysTrayLabel = new QLabel(gridLayoutWidget);
+        minimizeToSysTrayLabel->setObjectName(QString::fromUtf8("minimizeToSysTrayLabel"));
+        minimizeToSysTrayLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout->addItem(verticalSpacer_3, 4, 1, 1, 1);
-
-        startMinimizedLabel = new QLabel(gridLayoutWidget);
-        startMinimizedLabel->setObjectName(QString::fromUtf8("startMinimizedLabel"));
-        startMinimizedLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        gridLayout->addWidget(startMinimizedLabel, 0, 1, 1, 1);
+        gridLayout->addWidget(minimizeToSysTrayLabel, 3, 1, 1, 1);
 
         enableSysTrayCheckbox = new QCheckBox(gridLayoutWidget);
         enableSysTrayCheckbox->setObjectName(QString::fromUtf8("enableSysTrayCheckbox"));
 
-        gridLayout->addWidget(enableSysTrayCheckbox, 1, 2, 1, 1);
+        gridLayout->addWidget(enableSysTrayCheckbox, 2, 2, 1, 1);
+
+        startMinimizedCheckbox = new QCheckBox(gridLayoutWidget);
+        startMinimizedCheckbox->setObjectName(QString::fromUtf8("startMinimizedCheckbox"));
+
+        gridLayout->addWidget(startMinimizedCheckbox, 1, 2, 1, 1);
 
         sysTrayNotificationsCheckbox = new QCheckBox(gridLayoutWidget);
         sysTrayNotificationsCheckbox->setObjectName(QString::fromUtf8("sysTrayNotificationsCheckbox"));
 
-        gridLayout->addWidget(sysTrayNotificationsCheckbox, 3, 2, 1, 1);
-
-        enableSysTrayLabel = new QLabel(gridLayoutWidget);
-        enableSysTrayLabel->setObjectName(QString::fromUtf8("enableSysTrayLabel"));
-        enableSysTrayLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        gridLayout->addWidget(enableSysTrayLabel, 1, 1, 1, 1);
+        gridLayout->addWidget(sysTrayNotificationsCheckbox, 5, 2, 1, 1);
 
         sysTrayNotificationsLabel = new QLabel(gridLayoutWidget);
         sysTrayNotificationsLabel->setObjectName(QString::fromUtf8("sysTrayNotificationsLabel"));
         sysTrayNotificationsLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout->addWidget(sysTrayNotificationsLabel, 3, 1, 1, 1);
+        gridLayout->addWidget(sysTrayNotificationsLabel, 5, 1, 1, 1);
 
         minimizeToSysTrayCheckbox = new QCheckBox(gridLayoutWidget);
         minimizeToSysTrayCheckbox->setObjectName(QString::fromUtf8("minimizeToSysTrayCheckbox"));
 
-        gridLayout->addWidget(minimizeToSysTrayCheckbox, 2, 2, 1, 1);
+        gridLayout->addWidget(minimizeToSysTrayCheckbox, 3, 2, 1, 1);
 
-        minimizeToSysTrayLabel = new QLabel(gridLayoutWidget);
-        minimizeToSysTrayLabel->setObjectName(QString::fromUtf8("minimizeToSysTrayLabel"));
-        minimizeToSysTrayLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addWidget(minimizeToSysTrayLabel, 2, 1, 1, 1);
+        gridLayout->addItem(verticalSpacer_3, 6, 1, 1, 1);
 
-        startMinimizedCheckbox = new QCheckBox(gridLayoutWidget);
-        startMinimizedCheckbox->setObjectName(QString::fromUtf8("startMinimizedCheckbox"));
+        startMinimizedLabel = new QLabel(gridLayoutWidget);
+        startMinimizedLabel->setObjectName(QString::fromUtf8("startMinimizedLabel"));
+        startMinimizedLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout->addWidget(startMinimizedCheckbox, 0, 2, 1, 1);
+        gridLayout->addWidget(startMinimizedLabel, 1, 1, 1, 1);
+
+        enableSysTrayLabel = new QLabel(gridLayoutWidget);
+        enableSysTrayLabel->setObjectName(QString::fromUtf8("enableSysTrayLabel"));
+        enableSysTrayLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout->addWidget(enableSysTrayLabel, 2, 1, 1, 1);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer, 0, 0, 1, 1);
+        gridLayout->addItem(horizontalSpacer, 1, 3, 1, 1);
 
         tabWidget->addTab(generalSettingsTab, QString());
         advancedSettingsTab = new QWidget();
@@ -321,11 +328,11 @@ public:
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         remoteLabel = new QLabel(advancedSettingsTab);
         remoteLabel->setObjectName(QString::fromUtf8("remoteLabel"));
-        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Minimum);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(remoteLabel->sizePolicy().hasHeightForWidth());
-        remoteLabel->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(remoteLabel->sizePolicy().hasHeightForWidth());
+        remoteLabel->setSizePolicy(sizePolicy4);
         remoteLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         gridLayout_2->addWidget(remoteLabel, 0, 0, 1, 1);
@@ -334,19 +341,19 @@ public:
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         remoteLineEdit = new QLineEdit(advancedSettingsTab);
         remoteLineEdit->setObjectName(QString::fromUtf8("remoteLineEdit"));
-        QSizePolicy sizePolicy4(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(remoteLineEdit->sizePolicy().hasHeightForWidth());
-        remoteLineEdit->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy5(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(remoteLineEdit->sizePolicy().hasHeightForWidth());
+        remoteLineEdit->setSizePolicy(sizePolicy5);
         remoteLineEdit->setClearButtonEnabled(false);
 
         horizontalLayout->addWidget(remoteLineEdit);
 
         remoteSyncButton = new QPushButton(advancedSettingsTab);
         remoteSyncButton->setObjectName(QString::fromUtf8("remoteSyncButton"));
-        sizePolicy2.setHeightForWidth(remoteSyncButton->sizePolicy().hasHeightForWidth());
-        remoteSyncButton->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(remoteSyncButton->sizePolicy().hasHeightForWidth());
+        remoteSyncButton->setSizePolicy(sizePolicy3);
         remoteSyncButton->setMaximumSize(QSize(58, 16777215));
 
         horizontalLayout->addWidget(remoteSyncButton);
@@ -354,11 +361,11 @@ public:
         remoteCheckbox = new QCheckBox(advancedSettingsTab);
         remoteCheckbox->setObjectName(QString::fromUtf8("remoteCheckbox"));
         remoteCheckbox->setEnabled(false);
-        QSizePolicy sizePolicy5(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(remoteCheckbox->sizePolicy().hasHeightForWidth());
-        remoteCheckbox->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy6(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(remoteCheckbox->sizePolicy().hasHeightForWidth());
+        remoteCheckbox->setSizePolicy(sizePolicy6);
         remoteCheckbox->setMaximumSize(QSize(16777215, 25));
         remoteCheckbox->setLayoutDirection(Qt::LeftToRight);
         remoteCheckbox->setChecked(false);
@@ -420,13 +427,37 @@ public:
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        wsPortSpinbox = new QSpinBox(advancedSettingsTab);
+        wsPortSpinbox->setObjectName(QString::fromUtf8("wsPortSpinbox"));
+        QSizePolicy sizePolicy7(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(wsPortSpinbox->sizePolicy().hasHeightForWidth());
+        wsPortSpinbox->setSizePolicy(sizePolicy7);
+        wsPortSpinbox->setMinimumSize(QSize(0, 20));
+        wsPortSpinbox->setMaximum(65535);
+
+        horizontalLayout_2->addWidget(wsPortSpinbox);
+
+        wsServerCheckbox = new QCheckBox(advancedSettingsTab);
+        wsServerCheckbox->setObjectName(QString::fromUtf8("wsServerCheckbox"));
+        wsServerCheckbox->setEnabled(false);
+        wsServerCheckbox->setChecked(true);
+        wsServerCheckbox->setTristate(false);
+
+        horizontalLayout_2->addWidget(wsServerCheckbox);
+
+        listenPortLabel = new QLabel(advancedSettingsTab);
+        listenPortLabel->setObjectName(QString::fromUtf8("listenPortLabel"));
+        listenPortLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout_2->addWidget(listenPortLabel);
+
         listenPortSpinbox = new QSpinBox(advancedSettingsTab);
         listenPortSpinbox->setObjectName(QString::fromUtf8("listenPortSpinbox"));
-        QSizePolicy sizePolicy6(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(listenPortSpinbox->sizePolicy().hasHeightForWidth());
-        listenPortSpinbox->setSizePolicy(sizePolicy6);
+        sizePolicy7.setHeightForWidth(listenPortSpinbox->sizePolicy().hasHeightForWidth());
+        listenPortSpinbox->setSizePolicy(sizePolicy7);
+        listenPortSpinbox->setMinimumSize(QSize(0, 20));
         listenPortSpinbox->setMaximum(65535);
 
         horizontalLayout_2->addWidget(listenPortSpinbox);
@@ -451,11 +482,11 @@ public:
 
         gridLayout_2->addWidget(label, 6, 0, 1, 1);
 
-        listenPortLabel = new QLabel(advancedSettingsTab);
-        listenPortLabel->setObjectName(QString::fromUtf8("listenPortLabel"));
-        listenPortLabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        listenPortLabel_2 = new QLabel(advancedSettingsTab);
+        listenPortLabel_2->setObjectName(QString::fromUtf8("listenPortLabel_2"));
+        listenPortLabel_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_2->addWidget(listenPortLabel, 1, 0, 1, 1);
+        gridLayout_2->addWidget(listenPortLabel_2, 1, 0, 1, 1);
 
         tabWidget->addTab(advancedSettingsTab, QString());
 
@@ -464,8 +495,8 @@ public:
         settingsDialogButtons = new QDialogButtonBox(SettingsUI);
         settingsDialogButtons->setObjectName(QString::fromUtf8("settingsDialogButtons"));
         settingsDialogButtons->setEnabled(true);
-        sizePolicy1.setHeightForWidth(settingsDialogButtons->sizePolicy().hasHeightForWidth());
-        settingsDialogButtons->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(settingsDialogButtons->sizePolicy().hasHeightForWidth());
+        settingsDialogButtons->setSizePolicy(sizePolicy);
         settingsDialogButtons->setLayoutDirection(Qt::LeftToRight);
         settingsDialogButtons->setOrientation(Qt::Horizontal);
         settingsDialogButtons->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults);
@@ -478,7 +509,7 @@ public:
         QObject::connect(settingsDialogButtons, SIGNAL(accepted()), SettingsUI, SLOT(accept()));
         QObject::connect(settingsDialogButtons, SIGNAL(rejected()), SettingsUI, SLOT(reject()));
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(SettingsUI);
@@ -505,14 +536,14 @@ public:
         lpnBatchModeCheckbox->setText(QString());
         lpnBatchModeLabel->setText(QCoreApplication::translate("SettingsUI", "Batch Mode", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(labelSettingsTab), QCoreApplication::translate("SettingsUI", "Labels", nullptr));
-        startMinimizedLabel->setText(QCoreApplication::translate("SettingsUI", "Start minimized", nullptr));
+        minimizeToSysTrayLabel->setText(QCoreApplication::translate("SettingsUI", "Minimize to system tray", nullptr));
         enableSysTrayCheckbox->setText(QString());
+        startMinimizedCheckbox->setText(QString());
         sysTrayNotificationsCheckbox->setText(QString());
-        enableSysTrayLabel->setText(QCoreApplication::translate("SettingsUI", "Enable system tray icon", nullptr));
         sysTrayNotificationsLabel->setText(QCoreApplication::translate("SettingsUI", "System tray notifications", nullptr));
         minimizeToSysTrayCheckbox->setText(QString());
-        minimizeToSysTrayLabel->setText(QCoreApplication::translate("SettingsUI", "Minimize to system tray", nullptr));
-        startMinimizedCheckbox->setText(QString());
+        startMinimizedLabel->setText(QCoreApplication::translate("SettingsUI", "Start minimized", nullptr));
+        enableSysTrayLabel->setText(QCoreApplication::translate("SettingsUI", "Enable system tray icon", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(generalSettingsTab), QCoreApplication::translate("SettingsUI", "General", nullptr));
         remoteLabel->setText(QCoreApplication::translate("SettingsUI", "Sync Server:", nullptr));
         remoteLineEdit->setPlaceholderText(QString());
@@ -533,11 +564,16 @@ public:
         printServerLabel->setText(QCoreApplication::translate("SettingsUI", "Print Server:", nullptr));
         printServerLineEdit->setPlaceholderText(QString());
 #if QT_CONFIG(tooltip)
+        wsServerCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Fetch SKU from LPN", nullptr));
+#endif // QT_CONFIG(tooltip)
+        wsServerCheckbox->setText(QString());
+        listenPortLabel->setText(QCoreApplication::translate("SettingsUI", "Listen Port:", nullptr));
+#if QT_CONFIG(tooltip)
         skuServerCheckbox->setToolTip(QCoreApplication::translate("SettingsUI", "Fetch SKU from LPN", nullptr));
 #endif // QT_CONFIG(tooltip)
         skuServerCheckbox->setText(QString());
         label->setText(QCoreApplication::translate("SettingsUI", "Format String:", nullptr));
-        listenPortLabel->setText(QCoreApplication::translate("SettingsUI", "Listen Port:", nullptr));
+        listenPortLabel_2->setText(QCoreApplication::translate("SettingsUI", "WebSocket:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(advancedSettingsTab), QCoreApplication::translate("SettingsUI", "Advanced", nullptr));
     } // retranslateUi
 

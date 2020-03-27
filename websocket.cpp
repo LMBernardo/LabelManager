@@ -1,7 +1,7 @@
 #include "websocket.h"
 #include "mainwindow.h"
 
-webSocket::webSocket(quint16 port, QObject *parent) : QObject(parent)
+webSocket::webSocket(QObject *parent, quint16 port) : QObject(parent)
 {
     webSocketServer = new QWebSocketServer("LabelManWSS", QWebSocketServer::NonSecureMode, this);
     if (webSocketServer->listen(QHostAddress::Any, port)){

@@ -49,6 +49,8 @@ private slots:
 
     void on_enableSysTrayCheckbox_stateChanged(int checked);
 
+    void on_wsServerCheckbox_stateChanged(int arg1);
+
 private:
     Ui::SettingsUI *ui;
 

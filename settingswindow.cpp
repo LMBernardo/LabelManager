@@ -73,6 +73,8 @@ void SettingsWindow::saveSettings(){
     settings.setValue("copyClipboard", ui->copyCheckbox->isChecked());
     settings.setValue("lpnBatchMode", ui->lpnBatchModeCheckbox->isChecked());
     settings.setValue("listenPort", ui->listenPortSpinbox->value());
+    settings.setValue("wsPort", ui->wsPortSpinbox->value());
+    settings.setValue("wsEnabled", ui->wsServerCheckbox->isChecked());
 
     settings.endGroup();
 
@@ -103,6 +105,8 @@ void SettingsWindow::readSettings(){
     ui->minimizeToSysTrayCheckbox->setChecked( settings.value("minimizeToSystemTray").toBool());
     ui->sysTrayNotificationsCheckbox->setChecked( settings.value("systemTrayNotifications").toBool());
 
+    ui->wsServerCheckbox->setChecked( settings.value("wsEnabled").toBool() );
+    ui->wsPortSpinbox->setValue( settings.value("wsPort").toInt() );
 
     QStringList prefixList;
     QVariantMap lpnMap = settings.value("lpnMap").toMap();
@@ -147,6 +151,12 @@ void SettingsWindow::readSettings(){
         ui->sysTrayNotificationsCheckbox->setEnabled(false);
     }
 
+    if (ui->wsServerCheckbox->isChecked()){
+        ui->wsPortSpinbox->setEnabled(true);
+    } else {
+        ui->wsPortSpinbox->setEnabled(false);
+    }
+
      ui->lpnSpinBox->setPrefix(Utils::lpnPrefix(ui->prefixComboBox->currentText(), ui->paddingSpinBox->value(), ui->lpnSpinBox->value(), true));
 }
 
@@ -175,6 +185,8 @@ void SettingsWindow::on_settingsDialogButtons_clicked(QAbstractButton *button)
             settings.setValue("skuServer", false);
             settings.setValue("printServer", "localhost");
             settings.setValue("listenPort", 9457);
+            settings.setValue("wsPort", 9458);
+            settings.setValue("wsEnabled", true);
             settings.setValue("printerName", "Zebra_Technologies_ZTC_ZP_500_");
             settings.setValue("printCommand", "/usr/bin/print_label.sh $PRINTER_NAME");
             settings.setValue("usePrintCommand", true);
@@ -333,5 +345,14 @@ void SettingsWindow::on_enableSysTrayCheckbox_stateChanged(int checked)
     } else {
         ui->minimizeToSysTrayCheckbox->setEnabled(false);
         ui->sysTrayNotificationsCheckbox->setEnabled(false);
+    }
+}
+
+void SettingsWindow::on_wsServerCheckbox_stateChanged(int checked)
+{
+    if (checked == Qt::Checked){
+        ui->wsPortSpinbox->setEnabled(true);
+    } else {
+        ui->wsPortSpinbox->setEnabled(false);
     }
 }

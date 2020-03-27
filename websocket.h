@@ -8,7 +8,7 @@ class webSocket : public QObject
 {
     Q_OBJECT
 public:
-    explicit webSocket(quint16 port, QObject *parent = nullptr);
+    explicit webSocket(QObject *parent = nullptr, quint16 port = 9458);
     ~webSocket();
 
 private:
