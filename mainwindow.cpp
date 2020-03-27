@@ -232,16 +232,12 @@ void MainWindow::on_skuLineEdit_returnPressed()
 
 void MainWindow::on_printSKUButton_released()
 {
-//    ui->printSKUButton->setEnabled(false);
-//    QSettings settings;
-//    for (int i = 0; i < ui->skuQuantitySpinBox->value(); i++){
-//        printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
-//    }
-//    ui->printSKUButton->setEnabled(true);
+    ui->printSKUButton->setEnabled(false);
     QSettings settings;
-    QString host = settings.value("MainSettings/printServer").toString();
-    quint64 port = settings.value("MainSettings/listenPort").toInt();
-    lClient->sendData(host, port, "Test Data");
+    for (int i = 0; i < ui->skuQuantitySpinBox->value(); i++){
+        printLabel(settings.value("MainSettings/printCommand").toString(), ui->skuLineEdit->text());
+    }
+    ui->printSKUButton->setEnabled(true);
 }
 
 void MainWindow::on_textLineEdit_returnPressed()
