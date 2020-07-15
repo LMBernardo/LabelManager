@@ -62,7 +62,7 @@ unix: print_script.path = /usr/bin/
 unix: print_script.files = ./print_label.sh
 
 # Set execute permissions on print_label script
-unix: print_script_post.path = ./
+unix: print_script_post.path = /usr/bin
 unix: print_script_post.commands += chmod +x $(INSTALL_ROOT)/usr/bin/print_label.sh;
 
 unix: QMAKE_EXTRA_TARGETS += print_script_post
