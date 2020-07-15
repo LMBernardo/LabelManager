@@ -12,8 +12,9 @@
 #include <QMessageBox>
 #include <QSystemTrayIcon>
 #include <QCloseEvent>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+// Unused at the moment
+// #include <QtSerialPort/QSerialPort>
+// #include <QtSerialPort/QSerialPortInfo>
 
 #include "labelserver.h"
 #include "labelclient.h"
