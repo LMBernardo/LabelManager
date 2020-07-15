@@ -53,8 +53,9 @@ desktop.path = ~/.local/share/applications/
 desktop.files = ./LabelManager.desktop
 
 # Application icon
-unix: icon.path = ./
-unix: icon.commands += cp ./icons/icon-48.png $(INSTALL_ROOT)/usr/share/icons/labelmanager.png;
+unix: icon.path = /usr/share/icons/
+unix: icon.files = ./icons/icon-48.png
+unix: icon.commands += mv (INSTALL_ROOT)/usr/share/icons/icon-48.png $(INSTALL_ROOT)/usr/share/icons/labelmanager.png;
 
 # print_label.sh
 unix: print_script.path = /usr/bin/
