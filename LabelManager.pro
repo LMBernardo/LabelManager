@@ -62,12 +62,17 @@ unix: print_script.path = /usr/bin/
 unix: print_script.files = ./print_label.sh
 
 # Set execute permissions on print_label script
-unix: print_script_post.path = /usr/bin
+unix: print_script_post.path = ./
 unix: print_script_post.commands += chmod +x $(INSTALL_ROOT)/usr/bin/print_label.sh;
+
+# Fix permissions on generated /home/* folders under fakeroot (filesystem: 700, package: 755)
+# This is probably the result of doing something wrong, but I don't know how else to fix it..
+unix: post_install.path = ./
+unix: post_install.commands += chmod -R 700 $(INSTALL_ROOT)/home
 
 unix: QMAKE_EXTRA_TARGETS += print_script_post
 
-unix: INSTALLS += desktop icon print_script print_script_post
+unix: INSTALLS += desktop icon print_script print_script_post post_install
 else: INSTALLS += desktop
 
 RESOURCES += \
