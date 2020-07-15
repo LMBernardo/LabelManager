@@ -52,6 +52,10 @@ else: unix:!android: target.path = /usr/bin
 desktop.path = ~/.local/share/applications/
 desktop.files = ./LabelManager.desktop
 
+# Application icon
+unix: icon.path = ./
+unix: icon.commands += cp ./icons/icon-32.png /usr/share/icons/labelmanager.png;
+
 # print_label.sh
 unix: print_script.path = /usr/bin/
 unix: print_script.files = ./print_label.sh
@@ -62,7 +66,7 @@ unix: print_script_post.commands += chmod +x $(INSTALL_ROOT)/usr/bin/print_label
 
 unix: QMAKE_EXTRA_TARGETS += print_script_post
 
-unix: INSTALLS += desktop print_script print_script_post
+unix: INSTALLS += desktop icon print_script print_script_post
 else: INSTALLS += desktop
 
 RESOURCES += \
