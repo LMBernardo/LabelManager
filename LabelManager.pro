@@ -55,7 +55,7 @@ desktop.files = ./LabelManager.desktop
 # Application icon
 unix: icon.path = /usr/share/icons/
 unix: icon.files = ./icons/labelmanager.png
-unix: icon.extra += cp ./icons/icon-48.png ./icons/labelmanager.png;
+unix: icon.commands += cp ./icons/icon-48.png ./icons/labelmanager.png;
 
 # print_label.sh
 unix: print_script.path = /usr/bin/
